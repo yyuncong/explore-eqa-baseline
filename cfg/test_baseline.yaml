@@ -22,7 +22,7 @@ object_obs_phases: 10
 confidence_margin: 0.0
 # Question answering
 vlm:
-  hf_token: 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
+  hf_token: 
   device: cuda
   model_id: prism-dinosiglip+7b
   # revise the model storage path
