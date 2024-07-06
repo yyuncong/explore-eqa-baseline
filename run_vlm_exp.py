@@ -34,6 +34,7 @@ from src.habitat import (
 from src.geom import get_cam_intr, get_scene_bnds
 from src.vlm import VLM
 from src.tsdf import TSDFPlanner
+from loader import load_info,load_question_data,load_scene,build_output_dir
 
 
 def main(cfg):
@@ -43,6 +44,7 @@ def main(cfg):
     cam_intr = get_cam_intr(cfg.hfov, img_height, img_width)
 
     # Load dataset
+    '''
     with open(cfg.question_data_path) as f:
         questions_data = [
             {k: v for k, v in row.items()}
@@ -60,6 +62,8 @@ def main(cfg):
                 "init_angle": float(row["init_angle"]),
             }
     logging.info(f"Loaded {len(questions_data)} questions.")
+    '''
+    scenes, question_ids = load_info(cfg.question_data_path)
 
     # Load VLM
     vlm = VLM(cfg.vlm)
@@ -67,9 +71,11 @@ def main(cfg):
     # Run all questions
     cnt_data = 0
     results_all = []
-    for question_ind in tqdm(range(len(questions_data))):
+    #for question_ind in tqdm(range(len(questions_data))):
+    for question_id in tqdm(question_ids):
 
         # Extract question
+        '''
         question_data = questions_data[question_ind]
         scene = question_data["scene"]
         floor = question_data["floor"]
@@ -79,44 +85,60 @@ def main(cfg):
         answer = question_data["answer"]
         init_pts = init_pose_data[scene_floor]["init_pts"]
         init_angle = init_pose_data[scene_floor]["init_angle"]
-        logging.info(f"\n========\nIndex: {question_ind} Scene: {scene} Floor: {floor}")
+        '''
+        scene, question, answer, init_pts, init_angle = load_question_data(cfg.question_data_path,question_id)
+        #logging.info(f"\n========\nIndex: {question_ind} Scene: {scene} Floor: {floor}")
+        scene_path_dict = load_scene(cfg,scene)
 
         # Re-format the question to follow LLaMA style
+        '''
         vlm_question = question
         vlm_pred_candidates = ["A", "B", "C", "D"]
         for token, choice in zip(vlm_pred_candidates, choices):
             vlm_question += "\n" + token + "." + " " + choice
-        logging.info(f"Question:\n{vlm_question}\nAnswer: {answer}")
+        '''
+        logging.info(f"Question:\n{question} \nAnswer: {answer}")
 
         # Set data dir for this question - set initial data to be saved
         episode_data_dir = os.path.join(cfg.output_dir, str(question_ind))
         os.makedirs(episode_data_dir, exist_ok=True)
         result = {"question_ind": question_ind}
+        
+        # build up the directory for output
+        (episode_data_dir,
+         episode_observations_dir,
+         episode_object_observe_dir, 
+         episode_frontier_dir) = build_output_dir(cfg.output_dir, question_id)
+
+            
 
         # Set up scene in Habitat
         try:
             simulator.close()
         except:
             pass
+        '''
         scene_mesh_dir = os.path.join(
-            cfg.scene_data_path, scene, scene[6:] + ".basis" + ".glb"
+            scene_path_dict.scene_mesh_path
         )
         navmesh_file = os.path.join(
             cfg.scene_data_path, scene, scene[6:] + ".basis" + ".navmesh"
         )
+        '''
         sim_settings = {
-            "scene": scene_mesh_dir,
+            "scene": scene_path_dict.scene_mesh_path,
             "default_agent": 0,
             "sensor_height": cfg.camera_height,
             "width": img_width,
             "height": img_height,
             "hfov": cfg.hfov,
+            "scene_dataset_config_file": cfg.scene_dataset_config_file,
         }
         sim_cfg = make_simple_cfg(sim_settings)
         simulator = habitat_sim.Simulator(sim_cfg)
         pathfinder = simulator.pathfinder
         pathfinder.seed(cfg.seed)
-        pathfinder.load_nav_mesh(navmesh_file)
+        pathfinder.load_nav_mesh(scene_path_dict.navmesh_path)
         agent = simulator.initialize_agent(sim_settings["default_agent"])
         agent_state = habitat_sim.AgentState()
         pts = init_pts
@@ -169,6 +191,7 @@ def main(cfg):
             cam_pose_tsdf = pose_normal_to_tsdf(cam_pose_normal)
 
             # Get observation at current pose - skip black image, meaning robot is outside the floor
+            # get current observation
             obs = simulator.get_sensor_observations()
             rgb = obs["color_sensor"]
             depth = obs["depth_sensor"]
@@ -179,6 +202,8 @@ def main(cfg):
             num_black_pixels = np.sum(
                 np.sum(rgb, axis=-1) == 0
             )  # sum over channel first
+            # black pixel means unuseful information
+            # when there is at least some useful information, explore the scene
             if num_black_pixels < cfg.black_pixel_ratio * img_width * img_height:
 
                 # TSDF fusion
@@ -242,6 +267,7 @@ def main(cfg):
                     rgb_im_draw = rgb_im.copy()
                     draw = ImageDraw.Draw(rgb_im_draw)
                     for prompt_point_ind, point_pix in enumerate(prompt_points_pix):
+                        # draw "A", "B", "C", "D in each frontier point
                         draw.ellipse(
                             (
                                 point_pix[0] - cfg.visual_prompt.circle_radius,
@@ -338,16 +364,27 @@ def main(cfg):
         smx_vlm_all = np.empty((0, 4))
         relevancy_all = []
         candidates = ["A", "B", "C", "D"]
+        # gather the predictions and relevancy within all steps, and get the max one as the answer
+        # TODO: figure out
+        # 1. what is smx_vlm_pred
+        #    the probabilites for choosing each options
+        # 2. what is smx_vlm_rel - the confidence for answering the question given current exploration
+        #    two options: smx_vlm_rel[0] is the confidence while smx_vlm_rel[1] is not confidence
         for step in range(num_step):
             smx_vlm_pred = result[f"step_{step}"]["smx_vlm_pred"]
             smx_vlm_rel = result[f"step_{step}"]["smx_vlm_rel"]
+            # the confidence at each step
             relevancy_all.append(smx_vlm_rel[0])
+            # the weighted prediction over for choices([pa*r,pb*r,pc*r,pd*r])
             smx_vlm_all = np.vstack((smx_vlm_all, smx_vlm_rel[0] * smx_vlm_pred))
         # Option 1: use the max of the weighted predictions
+        # get the largest prediction value for each choices(across different steps)
         smx_vlm_max = np.max(smx_vlm_all, axis=0)
+        # find the largest prediction value among all best cases
         pred_token = candidates[np.argmax(smx_vlm_max)]
         success_weighted = pred_token == answer
         # Option 2: use the max of the relevancy
+        # get the most confident step, and use the prediction at that step
         max_relevancy = np.argmax(relevancy_all)
         relevancy_ord = np.flip(np.argsort(relevancy_all))
         pred_token = candidates[np.argmax(smx_vlm_all[max_relevancy])]

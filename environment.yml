@@ -1,4 +1,4 @@
-name: explore-eqa
+name: eqa-baseline
 channels:
   - hcc
   - conda-forge
