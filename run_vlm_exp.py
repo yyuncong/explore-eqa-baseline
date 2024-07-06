@@ -7,6 +7,7 @@ import os
 
 os.environ["TRANSFORMERS_VERBOSITY"] = "error"  # disable warning
 os.environ["TOKENIZERS_PARALLELISM"] = "false"
+os.environ["HF_HUB_OFFLINE"]="1"
 os.environ["HABITAT_SIM_LOG"] = (
     "quiet"  # https://aihabitat.org/docs/habitat-sim/logging.html
 )
@@ -30,12 +31,36 @@ from src.habitat import (
     pos_habitat_to_normal,
     pose_habitat_to_normal,
     pose_normal_to_tsdf,
+    get_quaternion
 )
 from src.geom import get_cam_intr, get_scene_bnds
 from src.vlm import VLM
 from src.tsdf import TSDFPlanner
 from loader import load_info,load_question_data,load_scene,build_output_dir
+from keys import hf_token
+from huggingface_hub import login
 
+# turn the agent around and collect the observation for answering the question
+def take_round_observation(agent_state,simulator,camera_tilt,pts,angle,num_obs,save_dir):
+    
+    angle_increment = 2*np.pi/num_obs
+    all_angles = [angle + angle_increment*(i - num_obs//2) for i in range(num_obs)]
+    # let the main viewing angle be the last to avoid overwriting
+    main_angle = all_angles.pop(num_obs//2)
+    all_angles.append(main_angle)
+    
+    # set agent state
+    for view_idx, ang in all_angles:
+        agent_state_obs = habitat_sim.AgentState()
+        agent_state_obs.position = pts
+        agent_state_obs.rotation = get_quaternion(ang, camera_tilt)
+        agent.set_state(angent_state_obs)
+        obs = simulator.get_sensor_observations()
+        rgb = obs["color_sensor"]
+        plt.imsave(
+            os.path.join(save_dir, f"{view_idx}.png"), rgb
+        )
+    
 
 def main(cfg):
     camera_tilt = cfg.camera_tilt_deg * np.pi / 180
@@ -64,7 +89,6 @@ def main(cfg):
     logging.info(f"Loaded {len(questions_data)} questions.")
     '''
     scenes, question_ids = load_info(cfg.question_data_path)
-
     # Load VLM
     vlm = VLM(cfg.vlm)
 
@@ -87,6 +111,8 @@ def main(cfg):
         init_angle = init_pose_data[scene_floor]["init_angle"]
         '''
         scene, question, answer, init_pts, init_angle = load_question_data(cfg.question_data_path,question_id)
+        logging.info(f"current scene: {scene}")
+        logging.info(f"current question: {question}")
         #logging.info(f"\n========\nIndex: {question_ind} Scene: {scene} Floor: {floor}")
         scene_path_dict = load_scene(cfg,scene)
 
@@ -101,6 +127,7 @@ def main(cfg):
 
         # Set data dir for this question - set initial data to be saved
         episode_data_dir = os.path.join(cfg.output_dir, str(question_ind))
+        print('output_dir:',cfg.output_dir)
         os.makedirs(episode_data_dir, exist_ok=True)
         result = {"question_ind": question_ind}
         
@@ -145,10 +172,13 @@ def main(cfg):
         angle = init_angle
 
         # Floor - use pts height as floor height
+        '''
         rotation = quat_to_coeffs(
             quat_from_angle_axis(angle, np.array([0, 1, 0]))
             * quat_from_angle_axis(camera_tilt, np.array([1, 0, 0]))
         ).tolist()
+        '''
+        rotation = get_quaternion(angle, camera_tilt)
         pts_normal = pos_habitat_to_normal(pts)
         floor_height = pts_normal[-1]
         tsdf_bnds, scene_size = get_scene_bnds(pathfinder, floor_height)
@@ -168,6 +198,8 @@ def main(cfg):
 
         # Run steps
         pts_pixs = np.empty((0, 2))  # for plotting path on the image
+        path_length = 0
+        early_stopped = False
         for cnt_step in range(num_step):
             logging.info(f"\n== step: {cnt_step}")
 
@@ -216,19 +248,7 @@ def main(cfg):
                     margin_h=int(cfg.margin_h_ratio * img_height),
                     margin_w=int(cfg.margin_w_ratio * img_width),
                 )
-
-                # Get VLM prediction
-                rgb_im = Image.fromarray(rgb, mode="RGBA").convert("RGB")
-                prompt_question = (
-                    vlm_question
-                    + "\nAnswer with the option's letter from the given choices directly."
-                )
-                # logging.info(f"Prompt Pred: {prompt_question}")
-                smx_vlm_pred = vlm.get_loss(
-                    rgb_im, prompt_question, vlm_pred_candidates
-                )
-                logging.info(f"Pred - Prob: {smx_vlm_pred}")
-
+                # no need to predict choices in open-ended questions
                 # Get VLM relevancy
                 prompt_rel = f"\nConsider the question: '{question}'. Are you confident about answering the question with the current view? Answer with Yes or No."
                 # logging.info(f"Prompt Rel: {prompt_rel}")
@@ -327,11 +347,22 @@ def main(cfg):
                     )  # voxel locations already saved in tsdf class
 
                 # Save data
-                result[step_name]["smx_vlm_pred"] = smx_vlm_pred
+                #result[step_name]["smx_vlm_pred"] = smx_vlm_pred
+                # check the condition for early stop:
                 result[step_name]["smx_vlm_rel"] = smx_vlm_rel
+                if smx_vlm_rel[0] - smx_vlm_rel[1] > cfg.confidence_margin:
+                    logging.info("Early stop due to high confidence!")
+                    take_round_observation(
+                        agent_state,simulator,
+                        camera_tilt,pts,angle,
+                        cfg.num_obs,episode_object_observe_dir)
+                    result['explore_path_length'] = path_length
+                    early_stopped = True
+                    # continue to solve the next question
+                    break
             else:
                 logging.info("Skipping black image!")
-                result[step_name]["smx_vlm_pred"] = np.ones((4)) / 4
+                #result[step_name]["smx_vlm_pred"] = np.ones((4)) / 4
                 result[step_name]["smx_vlm_rel"] = np.array([0.01, 0.99])
 
             # Determine next point
@@ -344,7 +375,10 @@ def main(cfg):
                 )
                 pts_pixs = np.vstack((pts_pixs, pts_pix))
                 pts_normal = np.append(pts_normal, floor_height)
-                pts = pos_normal_to_habitat(pts_normal)
+                # record the previous positions and next positions
+                prev_pts, pts = pts, pos_normal_to_habitat(pts_normal)
+                # add path length
+                path_length += float(np.linalg.norm(pts - prev_pts))
 
                 # Add path to ax5, with colormap to indicate order
                 ax5 = fig.axes[4]
@@ -359,58 +393,48 @@ def main(cfg):
                 quat_from_angle_axis(angle, np.array([0, 1, 0]))
                 * quat_from_angle_axis(camera_tilt, np.array([1, 0, 0]))
             ).tolist()
-
-        # Check if success using weighted prediction
-        smx_vlm_all = np.empty((0, 4))
-        relevancy_all = []
-        candidates = ["A", "B", "C", "D"]
+        # Check if success using weighted prediction(no need consider candidates)
         # gather the predictions and relevancy within all steps, and get the max one as the answer
         # TODO: figure out
         # 1. what is smx_vlm_pred
         #    the probabilites for choosing each options
         # 2. what is smx_vlm_rel - the confidence for answering the question given current exploration
         #    two options: smx_vlm_rel[0] is the confidence while smx_vlm_rel[1] is not confidence
-        for step in range(num_step):
-            smx_vlm_pred = result[f"step_{step}"]["smx_vlm_pred"]
-            smx_vlm_rel = result[f"step_{step}"]["smx_vlm_rel"]
-            # the confidence at each step
-            relevancy_all.append(smx_vlm_rel[0])
+        if not early_stopped:
+            relevancy_all = [
+                result[f"step_{step}"]["smx_vlm_rel"][0] 
+                for step in range(num_step)
+            ]
             # the weighted prediction over for choices([pa*r,pb*r,pc*r,pd*r])
-            smx_vlm_all = np.vstack((smx_vlm_all, smx_vlm_rel[0] * smx_vlm_pred))
-        # Option 1: use the max of the weighted predictions
-        # get the largest prediction value for each choices(across different steps)
-        smx_vlm_max = np.max(smx_vlm_all, axis=0)
-        # find the largest prediction value among all best cases
-        pred_token = candidates[np.argmax(smx_vlm_max)]
-        success_weighted = pred_token == answer
-        # Option 2: use the max of the relevancy
-        # get the most confident step, and use the prediction at that step
-        max_relevancy = np.argmax(relevancy_all)
-        relevancy_ord = np.flip(np.argsort(relevancy_all))
-        pred_token = candidates[np.argmax(smx_vlm_all[max_relevancy])]
-        success_max = pred_token == answer
+            # only keep option 2: use the max of the relevancy
+            # get the most confident step, and use the prediction at that step
+            max_relevancy = np.argmax(relevancy_all)
+            relevancy_ord = np.flip(np.argsort(relevancy_all))
+            pred_token = candidates[np.argmax(smx_vlm_all[max_relevancy])]
+            success_max = pred_token == answer
 
         # Episode summary
         logging.info(f"\n== Episode Summary")
         logging.info(f"Scene: {scene}, Floor: {floor}")
-        logging.info(f"Question:\n{vlm_question}\nAnswer: {answer}")
-        logging.info(f"Success (weighted): {success_weighted}")
+        logging.info(f"Question:\n{question}\nAnswer: {answer}")
         logging.info(f"Success (max): {success_max}")
         logging.info(
             f"Top 3 steps with highest relevancy with value: {relevancy_ord[:3]} {[relevancy_all[i] for i in relevancy_ord[:3]]}"
         )
+        '''
         for rel_ind in range(3):
             logging.info(f"Prediction: {smx_vlm_all[relevancy_ord[rel_ind]]}")
-
+        '''
         # Save data
         results_all.append(result)
+        '''
         cnt_data += 1
         if cnt_data % cfg.save_freq == 0:
             with open(
                 os.path.join(cfg.output_dir, f"results_{cnt_data}.pkl"), "wb"
             ) as f:
                 pickle.dump(results_all, f)
-
+        '''
     # Save all data again
     with open(os.path.join(cfg.output_dir, "results.pkl"), "wb") as f:
         pickle.dump(results_all, f)
@@ -421,7 +445,8 @@ def main(cfg):
 if __name__ == "__main__":
     import argparse
     from omegaconf import OmegaConf
-
+    # log in to use llama model
+    login(hf_token)
     # get config path
     parser = argparse.ArgumentParser()
     parser.add_argument("-cf", "--cfg_file", help="cfg file path", default="", type=str)

@@ -16,12 +16,17 @@ question_data_path: exploration_data
 save_obs: true
 save_freq: 10
 
+# configuration for storage
+object_obs_phases: 10
+
 confidence_margin: 0.0
 # Question answering
 vlm:
-  hf_token:
+  hf_token: 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
   device: cuda
   model_id: prism-dinosiglip+7b
+  # revise the model storage path
+  cache_dir: /work/pi_chuangg_umass_edu/yuncong/vlm_cache
 
 # Camera, image
 camera_height: 1.5
@@ -35,8 +40,8 @@ margin_h_ratio: 0.6
 
 # Navigation
 init_clearance: 0.5
-max_step_room_size_ratio: 3
-black_pixel_ratio: 0.5
+max_step_room_size_ratio: 11 #3
+black_pixel_ratio: 0.2 #0.5
 min_random_init_steps: 2
 
 # Semantic map
@@ -46,8 +51,8 @@ use_gsv: true
 gsv_T: 0.5
 gsv_F: 3
 planner:
-  dist_T: 10
-  unexplored_T: 0.2
+  dist_T: 9999 #10
+  unexplored_T: 2.0 #0.2
   unoccupied_T: 2.0
   val_T: 0.5
   val_dir_T: 0.5
