@@ -26,8 +26,8 @@ vlm:
 # Camera, image
 camera_height: 1.5
 camera_tilt_deg: -30
-img_width: 640
-img_height: 480
+img_width: 720
+img_height: 720
 hfov: 120
 tsdf_grid_size: 0.1
 margin_w_ratio: 0.25
