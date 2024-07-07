@@ -64,8 +64,10 @@ def build_output_dir(output_dir, question_id):
     episode_observations_dir = os.path.join(episode_data_dir, 'observations')
     episode_object_observe_dir = os.path.join(episode_data_dir, 'object_observations')
     episode_frontier_dir = os.path.join(episode_data_dir, 'frontier')
+    episode_semantic_dir = os.path.join(episode_data_dir, 'semantic')
     os.makedirs(episode_data_dir, exist_ok=True)
     os.makedirs(episode_observations_dir, exist_ok=True)
     os.makedirs(episode_object_observe_dir, exist_ok=True)
     os.makedirs(episode_frontier_dir, exist_ok=True)
-    return episode_data_dir, episode_observations_dir, episode_object_observe_dir, episode_frontier_dir
+    os.makedirs(episode_semantic_dir, exist_ok=True)
+    return episode_data_dir, episode_observations_dir, episode_object_observe_dir, episode_frontier_dir, episode_semantic_dir

@@ -177,3 +177,16 @@ def rgba2rgb(rgba, background=(1, 1, 1)):
     rgb[:, :, 1] = g * a + (1.0 - a) * G
     rgb[:, :, 2] = b * a + (1.0 - a) * B
     return rgb
+
+def get_quaternion(angle, camera_tilt):
+    normalized_angle = angle % (2 * np.pi)
+    if np.abs(normalized_angle - np.pi) < 1e-6:
+        return quat_to_coeffs(
+            quaternion.quaternion(0, 0, 1, 0) *
+            quat_from_angle_axis(camera_tilt, np.array([1, 0, 0]))
+        ).tolist()
+
+    return quat_to_coeffs(
+        quat_from_angle_axis(angle, np.array([0, 1, 0])) *
+        quat_from_angle_axis(camera_tilt, np.array([1, 0, 0]))
+    ).tolist()

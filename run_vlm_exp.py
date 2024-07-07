@@ -41,7 +41,7 @@ from keys import hf_token
 from huggingface_hub import login
 
 # turn the agent around and collect the observation for answering the question
-def take_round_observation(agent_state,simulator,camera_tilt,pts,angle,num_obs,save_dir):
+def take_round_observation(agent,simulator,camera_tilt,pts,angle,num_obs,save_dir):
     
     angle_increment = 2*np.pi/num_obs
     all_angles = [angle + angle_increment*(i - num_obs//2) for i in range(num_obs)]
@@ -94,7 +94,7 @@ def main(cfg):
 
     # Run all questions
     cnt_data = 0
-    results_all = []
+    results_all = {}
     #for question_ind in tqdm(range(len(questions_data))):
     for question_id in tqdm(question_ids):
 
@@ -129,13 +129,15 @@ def main(cfg):
         episode_data_dir = os.path.join(cfg.output_dir, str(question_ind))
         print('output_dir:',cfg.output_dir)
         os.makedirs(episode_data_dir, exist_ok=True)
-        result = {"question_ind": question_ind}
+        #result = {"question_id": question_id}
+        result = []
         
         # build up the directory for output
         (episode_data_dir,
          episode_observations_dir,
          episode_object_observe_dir, 
-         episode_frontier_dir) = build_output_dir(cfg.output_dir, question_id)
+         episode_frontier_dir,
+         episode_semantic_dir) = build_output_dir(cfg.output_dir, question_id)
 
             
 
@@ -200,6 +202,11 @@ def main(cfg):
         pts_pixs = np.empty((0, 2))  # for plotting path on the image
         path_length = 0
         early_stopped = False
+        max_answer = {
+            'relevancy':0,
+            'position':None,
+            'rotation':None
+        }
         for cnt_step in range(num_step):
             logging.info(f"\n== step: {cnt_step}")
 
@@ -212,7 +219,7 @@ def main(cfg):
             pts_normal = pos_habitat_to_normal(pts)
             result[step_name] = {"pts": pts, "angle": angle}
 
-            # Update camera info
+            # Update camera info for TSDF 
             sensor = agent.get_state().sensor_states["depth_sensor"]
             quaternion_0 = sensor.rotation
             translation_0 = sensor.position
@@ -229,7 +236,7 @@ def main(cfg):
             depth = obs["depth_sensor"]
             if cfg.save_obs:
                 plt.imsave(
-                    os.path.join(episode_data_dir, "{}.png".format(cnt_step)), rgb
+                    os.path.join(episode_observations_dir, "{}.png".format(cnt_step)), rgb
                 )
             num_black_pixels = np.sum(
                 np.sum(rgb, axis=-1) == 0
@@ -271,7 +278,7 @@ def main(cfg):
                     fig.tight_layout()
                     plt.savefig(
                         os.path.join(
-                            episode_data_dir, "{}_prompt_points.png".format(cnt_step)
+                            episode_frontier_dir, "{}_prompt_points.png".format(cnt_step)
                         )
                     )
                     plt.close()
@@ -308,7 +315,7 @@ def main(cfg):
                             font_size=12,
                         )
                     rgb_im_draw.save(
-                        os.path.join(episode_data_dir, f"{cnt_step}_draw.png")
+                        os.path.join(episode_frontier_dir, f"{cnt_step}_draw.png")
                     )
 
                     # get VLM reasoning for exploring
@@ -350,21 +357,29 @@ def main(cfg):
                 #result[step_name]["smx_vlm_pred"] = smx_vlm_pred
                 # check the condition for early stop:
                 result[step_name]["smx_vlm_rel"] = smx_vlm_rel
+            else:
+                logging.info("Skipping black image!")
+                #result[step_name]["smx_vlm_pred"] = np.ones((4)) / 4
+                result[step_name]["smx_vlm_rel"] = np.array([0.01, 0.99])
+            
+            # track the maxrelevancy and record corresponding positions and rotations
+            if smx_vlm_rel[0] > max_answer['relevancy']:
+                max_answer['relevancy'] = smx_vlm_rel[0]
+                max_answer['position'] = pts
+                max_answer['angle'] = angle
+            # check early stop condition
+            if cfg.early_stop:
                 if smx_vlm_rel[0] - smx_vlm_rel[1] > cfg.confidence_margin:
                     logging.info("Early stop due to high confidence!")
+                    logging.info("Current relevancy: {}".format(smx_vlm_rel[0])
                     take_round_observation(
-                        agent_state,simulator,
+                        agent,simulator,
                         camera_tilt,pts,angle,
                         cfg.num_obs,episode_object_observe_dir)
                     result['explore_path_length'] = path_length
                     early_stopped = True
                     # continue to solve the next question
                     break
-            else:
-                logging.info("Skipping black image!")
-                #result[step_name]["smx_vlm_pred"] = np.ones((4)) / 4
-                result[step_name]["smx_vlm_rel"] = np.array([0.01, 0.99])
-
             # Determine next point
             if cnt_step < num_step:
                 pts_normal, angle, pts_pix, fig = tsdf_planner.find_next_pose(
@@ -386,21 +401,23 @@ def main(cfg):
                 ax5.scatter(pts_pixs[0, 1], pts_pixs[0, 0], c="white", s=50)
                 fig.tight_layout()
                 plt.savefig(
-                    os.path.join(episode_data_dir, "{}_map.png".format(cnt_step + 1))
+                    os.path.join(episode_semantic_dir, "{}_map.png".format(cnt_step + 1))
                 )
                 plt.close()
+            '''
             rotation = quat_to_coeffs(
                 quat_from_angle_axis(angle, np.array([0, 1, 0]))
                 * quat_from_angle_axis(camera_tilt, np.array([1, 0, 0]))
             ).tolist()
+            '''
+            rotation = get_quaternion(angle, camera_tilt)
         # Check if success using weighted prediction(no need consider candidates)
         # gather the predictions and relevancy within all steps, and get the max one as the answer
-        # TODO: figure out
-        # 1. what is smx_vlm_pred
-        #    the probabilites for choosing each options
-        # 2. what is smx_vlm_rel - the confidence for answering the question given current exploration
-        #    two options: smx_vlm_rel[0] is the confidence while smx_vlm_rel[1] is not confidence
+        # select the step with the highest relevancy as the answer in cases:
+        # 1. do not use early stop
+        # 2. use early stop but not early stopped (relevancy < confidence_margin)
         if not early_stopped:
+            '''
             relevancy_all = [
                 result[f"step_{step}"]["smx_vlm_rel"][0] 
                 for step in range(num_step)
@@ -410,14 +427,20 @@ def main(cfg):
             # get the most confident step, and use the prediction at that step
             max_relevancy = np.argmax(relevancy_all)
             relevancy_ord = np.flip(np.argsort(relevancy_all))
-            pred_token = candidates[np.argmax(smx_vlm_all[max_relevancy])]
-            success_max = pred_token == answer
+            '''
+            logging.info(f"Use information in the step with the hightes relevancy {max_answer['relevancy']}")
+            take_round_observation(
+                agent,simulator,
+                camera_tilt,max_answer['position'],max_answer['angle'],
+                cfg.num_obs,episode_object_observe_dir)
+            result['explore_path_length'] = path_length
+            early_stopped = True
 
         # Episode summary
         logging.info(f"\n== Episode Summary")
         logging.info(f"Scene: {scene}, Floor: {floor}")
         logging.info(f"Question:\n{question}\nAnswer: {answer}")
-        logging.info(f"Success (max): {success_max}")
+        logging.info(f"Max relevancy: {max_answer['relevancy']}")
         logging.info(
             f"Top 3 steps with highest relevancy with value: {relevancy_ord[:3]} {[relevancy_all[i] for i in relevancy_ord[:3]]}"
         )
@@ -426,7 +449,7 @@ def main(cfg):
             logging.info(f"Prediction: {smx_vlm_all[relevancy_ord[rel_ind]]}")
         '''
         # Save data
-        results_all.append(result)
+        results_all[question_id] = result
         '''
         cnt_data += 1
         if cnt_data % cfg.save_freq == 0:
