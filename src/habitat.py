@@ -1,6 +1,7 @@
 import numpy as np
 import habitat_sim
-
+from habitat_sim.utils.common import quat_to_coeffs, quat_from_angle_axis
+import quaternion
 
 def pos_normal_to_habitat(pts):
     # +90 deg around x-axis

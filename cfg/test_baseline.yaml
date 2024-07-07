@@ -17,10 +17,10 @@ save_obs: true
 save_freq: 10
 
 # configuration for storage
-object_obs_phases: 10
+object_obs: 10
 early_stop: true
 
-confidence_margin: 0.0
+confidence_margin: -0.4
 # Question answering
 vlm:
   hf_token: 

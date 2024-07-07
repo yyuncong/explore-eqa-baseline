@@ -7,7 +7,8 @@ import os
 
 os.environ["TRANSFORMERS_VERBOSITY"] = "error"  # disable warning
 os.environ["TOKENIZERS_PARALLELISM"] = "false"
-os.environ["HF_HUB_OFFLINE"]="1"
+#os.environ["DISABLE_IPV6"] = "True"
+#os.environ["HF_HUB_OFFLINE"]="1"
 os.environ["HABITAT_SIM_LOG"] = (
     "quiet"  # https://aihabitat.org/docs/habitat-sim/logging.html
 )
@@ -39,6 +40,7 @@ from src.tsdf import TSDFPlanner
 from loader import load_info,load_question_data,load_scene,build_output_dir
 from keys import hf_token
 from huggingface_hub import login
+import json
 
 # turn the agent around and collect the observation for answering the question
 def take_round_observation(agent,simulator,camera_tilt,pts,angle,num_obs,save_dir):
@@ -50,11 +52,11 @@ def take_round_observation(agent,simulator,camera_tilt,pts,angle,num_obs,save_di
     all_angles.append(main_angle)
     
     # set agent state
-    for view_idx, ang in all_angles:
+    for view_idx, ang in enumerate(all_angles):
         agent_state_obs = habitat_sim.AgentState()
         agent_state_obs.position = pts
         agent_state_obs.rotation = get_quaternion(ang, camera_tilt)
-        agent.set_state(angent_state_obs)
+        agent.set_state(agent_state_obs)
         obs = simulator.get_sensor_observations()
         rgb = obs["color_sensor"]
         plt.imsave(
@@ -126,11 +128,11 @@ def main(cfg):
         logging.info(f"Question:\n{question} \nAnswer: {answer}")
 
         # Set data dir for this question - set initial data to be saved
-        episode_data_dir = os.path.join(cfg.output_dir, str(question_ind))
+        episode_data_dir = os.path.join(cfg.output_dir, str(question_id))
         print('output_dir:',cfg.output_dir)
         os.makedirs(episode_data_dir, exist_ok=True)
         #result = {"question_id": question_id}
-        result = []
+        result = {}
         
         # build up the directory for output
         (episode_data_dir,
@@ -161,7 +163,7 @@ def main(cfg):
             "width": img_width,
             "height": img_height,
             "hfov": cfg.hfov,
-            "scene_dataset_config_file": cfg.scene_dataset_config_file,
+            "scene_dataset_config_file": cfg.scene_dataset_config_path,
         }
         sim_cfg = make_simple_cfg(sim_settings)
         simulator = habitat_sim.Simulator(sim_cfg)
@@ -257,6 +259,7 @@ def main(cfg):
                 )
                 # no need to predict choices in open-ended questions
                 # Get VLM relevancy
+                rgb_im = Image.fromarray(rgb, mode="RGBA").convert("RGB")
                 prompt_rel = f"\nConsider the question: '{question}'. Are you confident about answering the question with the current view? Answer with Yes or No."
                 # logging.info(f"Prompt Rel: {prompt_rel}")
                 smx_vlm_rel = vlm.get_loss(rgb_im, prompt_rel, ["Yes", "No"])
@@ -371,11 +374,11 @@ def main(cfg):
             if cfg.early_stop:
                 if smx_vlm_rel[0] - smx_vlm_rel[1] > cfg.confidence_margin:
                     logging.info("Early stop due to high confidence!")
-                    logging.info("Current relevancy: {}".format(smx_vlm_rel[0])
+                    logging.info("Current relevancy: {}".format(smx_vlm_rel[0]))
                     take_round_observation(
                         agent,simulator,
                         camera_tilt,pts,angle,
-                        cfg.num_obs,episode_object_observe_dir)
+                        cfg.object_obs,episode_object_observe_dir)
                     result['explore_path_length'] = path_length
                     early_stopped = True
                     # continue to solve the next question
@@ -417,28 +420,27 @@ def main(cfg):
         # 1. do not use early stop
         # 2. use early stop but not early stopped (relevancy < confidence_margin)
         if not early_stopped:
-            '''
-            relevancy_all = [
-                result[f"step_{step}"]["smx_vlm_rel"][0] 
-                for step in range(num_step)
-            ]
-            # the weighted prediction over for choices([pa*r,pb*r,pc*r,pd*r])
-            # only keep option 2: use the max of the relevancy
-            # get the most confident step, and use the prediction at that step
-            max_relevancy = np.argmax(relevancy_all)
-            relevancy_ord = np.flip(np.argsort(relevancy_all))
-            '''
             logging.info(f"Use information in the step with the hightes relevancy {max_answer['relevancy']}")
             take_round_observation(
                 agent,simulator,
                 camera_tilt,max_answer['position'],max_answer['angle'],
-                cfg.num_obs,episode_object_observe_dir)
+                cfg.object_obs,episode_object_observe_dir)
             result['explore_path_length'] = path_length
             early_stopped = True
 
+        relevancy_all = [
+            result[f"step_{step}"]["smx_vlm_rel"][0] 
+            for step in range(num_step)
+            if f"step_{step}" in result.keys()
+        ]
+        # the weighted prediction over for choices([pa*r,pb*r,pc*r,pd*r])
+        # only keep option 2: use the max of the relevancy
+        # get the most confident step, and use the prediction at that step
+        max_relevancy = np.argmax(relevancy_all)
+        relevancy_ord = np.flip(np.argsort(relevancy_all))
         # Episode summary
         logging.info(f"\n== Episode Summary")
-        logging.info(f"Scene: {scene}, Floor: {floor}")
+        logging.info(f"Scene: {scene}")
         logging.info(f"Question:\n{question}\nAnswer: {answer}")
         logging.info(f"Max relevancy: {max_answer['relevancy']}")
         logging.info(
@@ -450,8 +452,12 @@ def main(cfg):
         '''
         # Save data
         results_all[question_id] = result
-        '''
+        
         cnt_data += 1
+        # dummy setting for function test
+        if cnt_data > 5:
+            break
+        '''
         if cnt_data % cfg.save_freq == 0:
             with open(
                 os.path.join(cfg.output_dir, f"results_{cnt_data}.pkl"), "wb"
