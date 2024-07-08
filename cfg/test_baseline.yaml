@@ -18,6 +18,7 @@ save_freq: 10
 
 # configuration for storage
 object_obs: 10
+num_last_views: 5
 early_stop: true
 
 confidence_margin: -0.4

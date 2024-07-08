@@ -3,6 +3,8 @@ import os
 import random
 from easydict import EasyDict
 import logging
+import matplotlib.pyplot as plt
+import shutil
 
 
 def load_info(question_data_path):
@@ -71,3 +73,18 @@ def build_output_dir(output_dir, question_id):
     os.makedirs(episode_frontier_dir, exist_ok=True)
     os.makedirs(episode_semantic_dir, exist_ok=True)
     return episode_data_dir, episode_observations_dir, episode_object_observe_dir, episode_frontier_dir, episode_semantic_dir
+
+def store_observations(observe_dir, observations):
+    for view_idx, observation in enumerate(observations):
+        plt.imsave(
+            os.path.join(save_dir, f"{view_idx}.png"), rgb
+        )
+
+# copy the last k observations from the observation directory to the object observation directory 
+# as the observation for the object
+def extract_last_k_observations(src_dir, dst_dir, idx, k = 5):
+    files = os.listdir(src_dir)
+    files = sorted(files, key=lambda x: int(x.split('.')[0]))
+    start = max(idx-k,0)
+    for i in range(start,idx):
+        shutil.copy2(os.path.join(src_dir,files[i]),os.path.join(dst_dir,f'{i-start}.png'))

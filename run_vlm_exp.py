@@ -37,7 +37,7 @@ from src.habitat import (
 from src.geom import get_cam_intr, get_scene_bnds
 from src.vlm import VLM
 from src.tsdf import TSDFPlanner
-from loader import load_info,load_question_data,load_scene,build_output_dir
+from loader import load_info,load_question_data,load_scene,build_output_dir,store_observations,extract_last_k_observations
 from keys import hf_token
 from huggingface_hub import login
 import json
@@ -234,7 +234,6 @@ def main(cfg):
             # Get observation at current pose - skip black image, meaning robot is outside the floor
             # get current observation
             obs = simulator.get_sensor_observations()
-            rgb = obs["color_sensor"]
             depth = obs["depth_sensor"]
             if cfg.save_obs:
                 plt.imsave(
@@ -375,16 +374,21 @@ def main(cfg):
                 if smx_vlm_rel[0] - smx_vlm_rel[1] > cfg.confidence_margin:
                     logging.info("Early stop due to high confidence!")
                     logging.info("Current relevancy: {}".format(smx_vlm_rel[0]))
+                    '''
                     take_round_observation(
                         agent,simulator,
                         camera_tilt,pts,angle,
                         cfg.object_obs,episode_object_observe_dir)
+                    '''
+                    extract_last_k_observations(
+                        episode_observations_dir,episode_object_observe_dir,cnt_step,cfg.num_last_views
+                    )
                     result['explore_path_length'] = path_length
                     early_stopped = True
                     # continue to solve the next question
                     break
-            # Determine next point
-            if cnt_step < num_step:
+            # Determine next point 
+            if cnt_step < num_step - 1:
                 pts_normal, angle, pts_pix, fig = tsdf_planner.find_next_pose(
                     pts=pts_normal,
                     angle=angle,
@@ -419,15 +423,6 @@ def main(cfg):
         # select the step with the highest relevancy as the answer in cases:
         # 1. do not use early stop
         # 2. use early stop but not early stopped (relevancy < confidence_margin)
-        if not early_stopped:
-            logging.info(f"Use information in the step with the hightes relevancy {max_answer['relevancy']}")
-            take_round_observation(
-                agent,simulator,
-                camera_tilt,max_answer['position'],max_answer['angle'],
-                cfg.object_obs,episode_object_observe_dir)
-            result['explore_path_length'] = path_length
-            early_stopped = True
-
         relevancy_all = [
             result[f"step_{step}"]["smx_vlm_rel"][0] 
             for step in range(num_step)
@@ -436,8 +431,22 @@ def main(cfg):
         # the weighted prediction over for choices([pa*r,pb*r,pc*r,pd*r])
         # only keep option 2: use the max of the relevancy
         # get the most confident step, and use the prediction at that step
-        max_relevancy = np.argmax(relevancy_all)
+        max_relevancy_step = np.argmax(relevancy_all)
         relevancy_ord = np.flip(np.argsort(relevancy_all))
+        if not early_stopped:
+            logging.info(f"Use information in the step with the hightes relevancy {max_answer['relevancy']}")
+            '''
+            take_round_observation(
+                agent,simulator,
+                camera_tilt,max_answer['position'],max_answer['angle'],
+                cfg.object_obs,episode_object_observe_dir)
+            '''
+            extract_last_k_observations(
+                episode_observations_dir,episode_object_observe_dir,max_relevancy_step,cfg.num_last_views
+            )
+            result['explore_path_length'] = path_length
+            early_stopped = True
+
         # Episode summary
         logging.info(f"\n== Episode Summary")
         logging.info(f"Scene: {scene}")
@@ -455,8 +464,6 @@ def main(cfg):
         
         cnt_data += 1
         # dummy setting for function test
-        if cnt_data > 5:
-            break
         '''
         if cnt_data % cfg.save_freq == 0:
             with open(
