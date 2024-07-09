@@ -1,6 +1,6 @@
 # General
 seed: 42
-exp_name: vlm-eqa-baseline-eval
+exp_name: vlm-eqa-baseline-eval-raw
 output_parent_dir: /work/pi_chuangg_umass_edu/yuncong/results
 scene_dataset_config_path: "data/hm3d_annotated_basis.scene_dataset_config.json"
 scene_data_path_train: /project/pi_chuangg_umass_edu/yuncong/data_v2/scene_datasets/hm3d/train
@@ -12,7 +12,7 @@ scene_features_path_val: /work/pi_chuangg_umass_edu/yuncong/data/scene_feature_d
 #question_data_path: data/questions.csv
 #init_pose_data_path: data/scene_init_poses.csv
 #scene_data_path: /n/fs/llm-unc/hm3dsem-train
-question_data_path: exploration_data
+question_data_path: data/generated_questions-eval.json #exploration_data
 save_obs: true
 save_freq: 10
 
@@ -28,7 +28,7 @@ confidence_threshold: 0.4
 vlm:
   hf_token: 
   device: cuda
-  model_id: prism-dinosiglip+7b
+  model_id: prism-dinosiglip+13b
   # revise the model storage path
   cache_dir: /work/pi_chuangg_umass_edu/yuncong/vlm_cache
 
@@ -44,8 +44,8 @@ margin_h_ratio: 0.6
 
 # Navigation
 init_clearance: 0.5
-max_step_room_size_ratio: 11 #3
-black_pixel_ratio: 0.2 #0.5
+max_step_room_size_ratio: 3
+black_pixel_ratio: 0.5
 min_random_init_steps: 2
 
 # Semantic map
@@ -55,8 +55,8 @@ use_gsv: true
 gsv_T: 0.5
 gsv_F: 3
 planner:
-  dist_T: 9999 #10
-  unexplored_T: 2.0 #0.2
+  dist_T: 10 #9999 #10
+  unexplored_T: 0.2 #2.0
   unoccupied_T: 2.0
   val_T: 0.5
   val_dir_T: 0.5

@@ -5,6 +5,9 @@ from easydict import EasyDict
 import logging
 import matplotlib.pyplot as plt
 import shutil
+import quaternion
+from habitat_sim.utils.common import quat_from_angle_axis, quat_to_angle_axis
+import numpy as np
 
 
 def load_info(question_data_path):
@@ -21,6 +24,15 @@ def load_info(question_data_path):
     random.shuffle(scenes)
     return scenes, filtered_questions
 
+def load_info_eval(question_data_path):
+    with open(question_data_path, 'r') as f:
+        questions = json.load(f)
+    scenes = sorted([question['episode_history'] for question in questions])
+    scenes = sorted(list(set(scenes)))
+    random.shuffle(scenes)
+    return scenes, questions
+
+
 def load_question_data(question_path,question_id):
     with open(os.path.join(question_path,question_id,'metadata.json'), 'r') as f:
         metadata = json.load(f)
@@ -30,6 +42,17 @@ def load_question_data(question_path,question_id):
     init_pts = metadata['init_pts']
     init_angle = metadata['init_angle']
     return scene, question, answer, init_pts, init_angle
+
+def load_question_eval(question_data):
+    question_id = question_data['question_id']
+    question = question_data['question']
+    scene = question_data['episode_history']
+    answer = question_data['answer']
+    init_pts = question_data['position']
+    init_quat = quaternion.quaternion(*question_data["rotation"])
+    angle, axis = quat_to_angle_axis(init_quat)
+    angle = angle * axis[1] / np.abs(axis[1])
+    return scene, question_id, question, answer, init_pts, angle
 
 def load_scene(cfg,scene_id):
     scene_path = cfg.scene_data_path_train if int(scene_id.split("-")[0]) < 800 else cfg.scene_data_path_val
@@ -85,6 +108,6 @@ def store_observations(observe_dir, observations):
 def extract_last_k_observations(src_dir, dst_dir, idx, k = 5):
     files = os.listdir(src_dir)
     files = sorted(files, key=lambda x: int(x.split('.')[0]))
-    start = max(idx-k,0)
-    for i in range(start,idx):
+    start = max(idx+1-k,0)
+    for i in range(start,idx+1):
         shutil.copy2(os.path.join(src_dir,files[i]),os.path.join(dst_dir,f'{i-start}.png'))
