@@ -1,6 +1,6 @@
 # General
 seed: 42
-exp_name: vlm-eqa-baseline-eval-new
+exp_name: vlm-eqa-baseline-eval-7b
 output_parent_dir: /work/pi_chuangg_umass_edu/yuncong/results
 scene_dataset_config_path: "data/hm3d_annotated_basis.scene_dataset_config.json"
 scene_data_path_train: /project/pi_chuangg_umass_edu/yuncong/data_v2/scene_datasets/hm3d/train
@@ -28,7 +28,7 @@ confidence_threshold: 0.4
 vlm:
   hf_token: 
   device: cuda
-  model_id: prism-dinosiglip+13b
+  model_id: prism-dinosiglip+7b
   # revise the model storage path
   cache_dir: /work/pi_chuangg_umass_edu/yuncong/vlm_cache
 

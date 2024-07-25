@@ -12,4 +12,4 @@
 module load miniconda/22.11.1-1
 conda activate eqa-baseline
 
-python run_vlm_exp.py -cf cfg/eval_baseline_raw.yaml
+python run_vlm_exp.py -cf cfg/eval_baseline.yaml
