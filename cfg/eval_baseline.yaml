@@ -1,6 +1,6 @@
 # General
 seed: 42
-exp_name: vlm-eqa-baseline-eval-7b
+exp_name: vlm-eval-alignment-test
 output_parent_dir: /work/pi_chuangg_umass_edu/yuncong/results
 scene_dataset_config_path: "data/hm3d_annotated_basis.scene_dataset_config.json"
 scene_data_path_train: /project/pi_chuangg_umass_edu/yuncong/data_v2/scene_datasets/hm3d/train
@@ -12,7 +12,7 @@ scene_features_path_val: /work/pi_chuangg_umass_edu/yuncong/data/scene_feature_d
 #question_data_path: data/questions.csv
 #init_pose_data_path: data/scene_init_poses.csv
 #scene_data_path: /n/fs/llm-unc/hm3dsem-train
-question_data_path: data/generated_questions-eval.json #exploration_data
+#question_data_path: data/generated_questions-eval.json #exploration_data
 save_obs: true
 save_freq: 10
 

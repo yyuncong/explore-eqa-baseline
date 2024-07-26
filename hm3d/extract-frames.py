@@ -15,6 +15,8 @@ import tqdm
 from config import make_cfg
 from PIL import Image
 import json
+import quaternion
+from habitat_sim.utils.common import quat_from_angle_axis, quat_to_angle_axis, quat_to_coeffs
 os.environ["MAGNUM_LOG"] = "quiet"
 os.environ["HABITAT_SIM_LOG"] = "quiet"
 
@@ -47,7 +49,7 @@ def parse_args() -> argparse.Namespace:
     parser.add_argument(
         "--consider_question",
         type = str,
-        default = "data/generated_questions-eval.json",
+        default = "data/filtered_data.json", #"data/generated_questions-eval.json",
     )
     args = parser.parse_args()
     return args
@@ -58,10 +60,10 @@ def get_config(
 ) -> habitat_sim.simulator.Configuration:
     settings = {
         "scene_id": scene_id,
-        "sensor_hfov": 90,
-        "sensor_width": 1920,
-        "sensor_height": 1080,
-        "sensor_position": sensor_position,  # height only
+        "sensor_hfov": 120, #90,
+        "sensor_width": 720, #1920,
+        "sensor_height": 720, #1080,
+        "sensor_position": 1.5 #sensor_position,  # height only
     }
     return make_cfg(settings)
 
@@ -75,9 +77,12 @@ def load_sim(path: Path, scene_id: str) -> habitat_sim.Simulator:
     parent_folder = "/work/pi_chuangg_umass_edu/yuncong/"
     scene_id = parent_folder + scene_id + "/" + config_file
     agent_state = data["agent_state"]
+    
     sensor_position = (
         agent_state.sensor_states["rgb"].position[1] - agent_state.position[1]
     )
+    
+    # sensor_position = 1.5
     # this means cfg should be a valid habitat_sim.simulator.Configuration
     # we need to add the scene config here
     cfg = get_config(scene_id=scene_id, sensor_position=sensor_position)
@@ -126,12 +131,26 @@ def save_color(path: Path, sim: habitat_sim.Simulator) -> None:
     Image.fromarray(obs["rgb"]).convert("RGB").save(rgb_path)
 
 
+def get_quaternion(angle, camera_tilt):
+    normalized_angle = angle % (2 * np.pi)
+    if np.abs(normalized_angle - np.pi) < 1e-6:
+        return quat_to_coeffs(
+            quaternion.quaternion(0, 0, 1, 0) *
+            quat_from_angle_axis(camera_tilt, np.array([1, 0, 0]))
+        ).tolist()
+
+    return quat_to_coeffs(
+        quat_from_angle_axis(angle, np.array([0, 1, 0])) *
+        quat_from_angle_axis(camera_tilt, np.array([1, 0, 0]))
+    ).tolist()
+    
 def extract_frames(in_folder: Path, scene_id: str, args: argparse.Namespace) -> None:
     print("Extracting frames to: {}".format(in_folder))
     files = sorted(in_folder.glob("*.pkl"))
     files = files[0:5]
     print(files)
     sim = load_sim(files[0],scene_id)
+    camera_tilt = (-30) * np.pi / 180
 
     print("Processing {} agent positions...".format(len(files)))
     for idx, path in enumerate(files):
@@ -140,8 +159,21 @@ def extract_frames(in_folder: Path, scene_id: str, args: argparse.Namespace) -> 
         #exit(0)
         data = pickle.load(path.open("rb"))
         agent = sim.get_agent(0)
-        agent.set_state(data["agent_state"])
-
+        agent_state = habitat_sim.AgentState()
+        # modify rotation with camera tilt
+        init_quat = quaternion.quaternion(data["agent_state"].rotation)
+        angle, axis = quat_to_angle_axis(init_quat)
+        angle = angle * axis[1] / np.abs(axis[1])
+        rotation = get_quaternion(angle, camera_tilt)
+        agent_state.position = data["agent_state"].position
+        agent_state.rotation = rotation #data["agent_state"].rotation
+        
+        agent.set_state(agent_state)
+        
+        if idx == 0:
+            print('initial agent state')
+            print(data["agent_state"].position)
+            print(data["agent_state"].rotation)
         # save data
         outpath = args.output_directory / path
         #print(outpath)
@@ -156,7 +188,7 @@ def extract_frames(in_folder: Path, scene_id: str, args: argparse.Namespace) -> 
     sim.close()
     print("Extracting frames to: {} done!".format(args.output_directory))
 
-def gather_test_scene(path):
+def gather_test_scene(path, pad_scene = []):
     with open(path,'r') as f:
         questions = json.load(f)
     scenes = {}

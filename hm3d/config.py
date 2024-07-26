@@ -90,7 +90,7 @@ def make_cfg(settings: Dict) -> SimulatorConfiguration:
             s["sensor_hfov"],
             s["sensor_height"],
             s["sensor_width"],
-            s["sensor_position"],
+            s["sensor_position"], # should align with sensor height = cfg.camera_height = 1.5
             s["sensor_pitch"],
         )
     )
