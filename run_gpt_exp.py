@@ -35,11 +35,11 @@ from src.habitat import (
     get_quaternion
 )
 from src.geom import get_cam_intr, get_scene_bnds
-from src.vlm import VLM
+#from src.vlm import VLM
 from src.tsdf import TSDFPlanner
 from loader import *
 #from keys import hf_token
-hf_token = os.getenv('HF_TOKEN')
+#hf_token = os.getenv('HF_TOKEN')
 from huggingface_hub import login
 import json
 from gpt_utils import get_confidence, get_directions, get_global_value
@@ -252,7 +252,7 @@ def main(cfg):
                 #prompt_rel = f"\nConsider the question: '{question}'. Are you confident about answering the question with the current view? Answer with Yes or No."
                 # logging.info(f"Prompt Rel: {prompt_rel}")
                 #smx_vlm_rel = vlm.get_loss(rgb_im, prompt_rel, ["Yes", "No"])
-                smx_vlm_rel = get_confidence(question, rgb)
+                smx_vlm_rel = get_confidence(question, rgb_im)
                 logging.info(f"Rel - Prob: {smx_vlm_rel}")
 
                 # Get frontier candidates
@@ -313,17 +313,7 @@ def main(cfg):
 
                     # get VLM reasoning for exploring
                     if cfg.use_lsv:
-                        '''
-                        prompt_lsv = f"\nConsider the question: '{question}', and you will explore the environment for answering it.\nWhich direction (black letters on the image) would you explore then? Answer with a single letter."
-                        # logging.info(f"Prompt Exp: {prompt_text}")
-                        lsv = vlm.get_loss(
-                            rgb_im_draw,
-                            prompt_lsv,
-                            draw_letters[:actual_num_prompt_points],
-                        )
-                        lsv *= actual_num_prompt_points / 3
-                        '''
-                        lsv = get_directions(question, rgb_img_draw, draw_letters[:actual_num_prompt_points])
+                        lsv = get_directions(question, rgb_im_draw, draw_letters[:actual_num_prompt_points])
                         lsv *= actual_num_prompt_points / 3
                     else:
                         lsv = (
@@ -335,7 +325,7 @@ def main(cfg):
                         #prompt_gsv = f"\nConsider the question: '{question}', and you will explore the environment for answering it. Is there any direction shown in the image worth exploring? Answer with Yes or No."
                         # logging.info(f"Prompt Exp base: {prompt_gsv}")
                         #gsv = vlm.get_loss(rgb_im, prompt_gsv, ["Yes", "No"])[0]
-                        gsv = get_global_value(question, rgb_im)
+                        gsv = get_global_value(question, rgb_im)[0]
                         gsv = (
                             np.exp(gsv / cfg.gsv_T) / cfg.gsv_F
                         )  # scale before combined with lsv
@@ -488,7 +478,7 @@ if __name__ == "__main__":
     import argparse
     from omegaconf import OmegaConf
     # log in to use llama model
-    login(hf_token)
+    #login(hf_token)
     # get config path
     parser = argparse.ArgumentParser()
     parser.add_argument("-cf", "--cfg_file", help="cfg file path", default="", type=str)

@@ -50,9 +50,11 @@ def call_openai_api(sys_prompt, contents) -> Optional[str]:
                 top_p=0.95,
                 frequency_penalty=0,
                 presence_penalty=0,
+                logprobs = True,
+                top_logprobs = 5,
                 stop=None,
             )
-            return completion.choices[0].message.content
+            return completion
         except openai.RateLimitError as e:
             print("Rate limit error, waiting for 60s")
             time.sleep(30)
@@ -66,15 +68,23 @@ def call_openai_api(sys_prompt, contents) -> Optional[str]:
 
     return None
 
+def parse_probs(response):
+    top_logprobs = response.choices[0].logprobs.content[0].top_logprobs
+    #print(top_logprobs)
+    prob_dict = {
+        log_probs.token: log_probs.logprob
+        for log_probs in top_logprobs
+    }
+    return prob_dict
+        
 # encode tensor images to base64 format
 def encode_tensor2base64(img):
-    img = Image.fromarray(img)
+    #img = Image.fromarray(img)
     buffer = BytesIO()
     img.save(buffer, format="PNG")
     buffer.seek(0)
     img_base64 = base64.b64encode(buffer.read()).decode("utf-8")
     return img_base64
-
 
 def format_confidence_question(question, img):
     sys_prompt = "Task: You are an agent in an indoor scene tasked with answering questions by observing the surroundings and exploring the environment."
@@ -83,10 +93,10 @@ def format_confidence_question(question, img):
     text = "Here is the current view of the scene."
     img = encode_tensor2base64(img)
     content.append((text, img))
-    text = f"\nConsider the question: '{question}'. Are you confident about answering the question with the current view? Answer with score 0-10, where 0 is not confident at all and 10 is very confident.\n"
+    text = f"\nConsider the question: '{question}'. Are you confident about answering the question with the current view? Answer with Yes/No \n"
     content.append((text,))
-    text = "you should return a score between 0 and 10.\n"
-    text += "you can show the reason for your confidence score but put it in a new line after the choice.\n"
+    #text = "you should return a score between 0 and 10.\n"
+    #text += "you can show the reason for your confidence score but put it in a new line after the choice.\n"
     return sys_prompt, content
 
 def get_confidence(question, img):
@@ -94,25 +104,19 @@ def get_confidence(question, img):
     retry_limit = 3
     while retry_limit > 0:
         response = call_openai_api(sys_prompt, content)
-        # parse the response
-        if response is not None:
-            response = response.strip()
-            if "\n" in response:
-                response = response.split("\n")
-                response, reason = response[0], response[-1]
-        else:
-            reason = ""
-        response = response.lower()
-        try:
-            confidence = float(response)
-            if confidence >= 0 and confidence <= 10:
-                logging.log(f"Reason for confidence{confidence/10}: {reason}")
-                return confidence/10
-            else:
-                logging.info("Invalid response, retrying")
-        except ValueError:
+        if response is None:
             logging.info("Invalid response, retrying")
-        retry_limit -= 1
+            retry_limit -= 1
+            continue
+        # parse the response
+        log_probs = parse_probs(response)
+        if "Yes" not in log_probs and "No" not in log_probs:
+            logging.info("Invalid response, retrying")
+            retry_limit -= 1
+            continue
+        probs = np.array([log_probs["Yes"], log_probs["No"]])
+        probs = np.exp(probs) / np.sum(np.exp(probs))
+        return probs
     
     # no valid reponse, not sure about the question
     return 0
@@ -125,14 +129,15 @@ def format_choose_direction(question, img, candidates):
     img = encode_tensor2base64(img)
     content.append((text, img))
     text = f"\nConsider the question: '{question}', and you will explore the environment for answering it.\nWhich direction (black letters on the image) would you explore then?\n"
-    text += f"Answer with following directions: {','.join(candidates)}\n and scores from 0-10, where 0 is not interested in exploring this direction and 10 is very interested in exploring\n"
-    text += f"Each (direction,score) pair should be printed in a new line. \n"
+    text += f"Answer with following directions: {','.join(candidates)}\n"
     content.append((text,))
     
+    '''
     text = "For example, if you are given candidates choices: A, B, C\n"
     text = "You can answer like this: A 5\n B 7\n C 3\n \n"
     text = "This means you think B is the most interesting direction to explore, while A and C may also be potential answers.\n"
     content.append((text,))
+    '''
     return sys_prompt, content
 
 def get_directions(question, img, candidates):
@@ -145,21 +150,22 @@ def get_directions(question, img, candidates):
             retry_limit -= 1
             continue
         # parse the response
-        response = response.split("\n")
-        directions = {}
-        for r in response:
-            r = r.split()
-            if len(r) == 2:
-                directions[r[0]] = float(r[1])
-        if list(directions.keys()) != candidates:
-            logging.info("Invalid response, retrying")
+        log_probs = parse_probs(response)
+        print(candidates)
+        print(log_probs)
+        if set(candidates).issubset(set(log_probs.keys())):
+            scores = np.zeros(len(candidates))
+            for i, c in enumerate(candidates):
+                if c in log_probs:
+                    scores[i] = log_probs[c]
+            scores = np.exp(scores) / np.sum(np.exp(scores))
+        else:
+            logging.info("Not all choices considered, retrying")
             retry_limit -= 1
             continue
-        scores = np.array(list(directions.values()))
-        scores = np.exp(scores) / np.sum(np.exp(scores))
         return scores
     
-    return np.ones(actual_num_prompt_points) / actual_num_prompt_points
+    return np.ones(len(candidates)) / len(candidates)
 
 def format_global_selection(question, img):
     sys_prompt = "Task: You are an agent in an indoor scene tasked with answering questions by observing the surroundings and exploring the environment."
@@ -170,9 +176,8 @@ def format_global_selection(question, img):
     content.append((text, img))
     
     text = f"\nConsider the question: '{question}', and you will explore the environment for answering it. Is there any direction shown in the image worth exploring?\n"
-    text = "Answer with score 0-10, where 0 is no directions worth exploring and 10 is very confident that there is direction worth exploring\n"
-    text += "you can show the reason for your confidence score but put it in a new line after the choice.\n"
-    
+    text = "Answer with Yes/No\n"
+    #text += "you can show the reason for your confidence score but put it in a new line after the choice.\n"
     return sys_prompt, content
 
 def get_global_value(question, img):
@@ -180,25 +185,20 @@ def get_global_value(question, img):
     retry_limit = 3
     while retry_limit > 0:
         response = call_openai_api(sys_prompt, content)
-        # parse the response
-        if response is not None:
-            response = response.strip()
-            if "\n" in response:
-                response = response.split("\n")
-                response, reason = response[0], response[-1]
-        else:
-            reason = ""
-        response = response.lower()
-        try:
-            confidence = float(response)
-            if confidence >= 0 and confidence <= 10:
-                logging.log(f"Reason for confidence{confidence/10}: {reason}")
-                return confidence/10
-            else:
-                logging.info("Invalid response, retrying")
-        except ValueError:
+        if response is None:
             logging.info("Invalid response, retrying")
-        retry_limit -= 1
+            retry_limit -= 1
+            continue
+        # parse the response
+        #log_probs = response['choices'][0]['logprobs']['top_logprobs'][0]
+        log_probs = parse_probs(response)
+        if "Yes" not in log_probs and "No" not in log_probs:
+            logging.info("Invalid response, retrying")
+            retry_limit -= 1
+            continue
+        probs = np.array([log_probs["Yes"], log_probs["No"]])
+        probs = np.exp(probs) / np.sum(np.exp(probs))
+        return probs
     
     return 0
     
