@@ -4,3 +4,4 @@ check_result.py
 cfg/raw_test.yaml
 output/
 data/frames
+__pycache__/
