@@ -8,12 +8,14 @@ import time
 from typing import Optional
 import logging
 import numpy as np
+import tiktoken
 
 client = AzureOpenAI(
     azure_endpoint="https://yuncong.openai.azure.com/",
     api_key=os.getenv('AZURE_OPENAI_KEY'),
     api_version="2024-02-15-preview",
 )
+tokenizer = tiktoken.get_encoding("o200k_base")
 
 def format_content(contents):
     formated_content = []
@@ -32,7 +34,7 @@ def format_content(contents):
     return formated_content
     
 # send information to openai
-def call_openai_api(sys_prompt, contents) -> Optional[str]:
+def call_openai_api(sys_prompt, contents, choices):
     max_tries = 5
     retry_count = 0
     formated_content = format_content(contents)
@@ -40,19 +42,20 @@ def call_openai_api(sys_prompt, contents) -> Optional[str]:
         {"role": "system", "content": sys_prompt},
         {"role": "user","content": formated_content}
     ]
+
+    choices_ids = [tokenizer.encode(c)[0] for c in choices]
+    logit_bias = {str(i): 100 for i in choices_ids}
+
     while retry_count < max_tries:
         try:
             completion = client.chat.completions.create(
                 model="gpt-4o",  # model = "deployment_name"
                 messages=message_text,
-                temperature=0.7,
-                max_tokens=4096,
-                top_p=0.95,
-                frequency_penalty=0,
-                presence_penalty=0,
+                temperature=0,
+                max_tokens=1,
                 logprobs = True,
                 top_logprobs = 5,
-                stop=None,
+                logit_bias=logit_bias,
             )
             return completion
         except openai.RateLimitError as e:
@@ -103,7 +106,7 @@ def get_confidence(question, img):
     sys_prompt, content = format_confidence_question(question, img)
     retry_limit = 3
     while retry_limit > 0:
-        response = call_openai_api(sys_prompt, content)
+        response = call_openai_api(sys_prompt, content, ["Yes", "No"])
         if response is None:
             logging.info("Invalid response, retrying")
             retry_limit -= 1
@@ -130,6 +133,10 @@ def format_choose_direction(question, img, candidates):
     content.append((text, img))
     text = f"\nConsider the question: '{question}', and you will explore the environment for answering it.\nWhich direction (black letters on the image) would you explore then?\n"
     text += f"Answer with following directions: {','.join(candidates)}\n"
+    text += f"Please return with letter "
+    for c in candidates[:-1]:
+        text += f"{c}, "
+    text += f"or {candidates[-1]} only.\n"
     content.append((text,))
     
     '''
@@ -144,21 +151,23 @@ def get_directions(question, img, candidates):
     sys_prompt, content = format_choose_direction(question, img, candidates)
     retry_limit = 3
     while retry_limit > 0:
-        response = call_openai_api(sys_prompt, content)
+        response = call_openai_api(sys_prompt, content, candidates)
         if response is None:
             logging.info("Invalid response, retrying")
             retry_limit -= 1
             continue
         # parse the response
         log_probs = parse_probs(response)
-        print(candidates)
-        print(log_probs)
         if set(candidates).issubset(set(log_probs.keys())):
             scores = np.zeros(len(candidates))
             for i, c in enumerate(candidates):
                 if c in log_probs:
                     scores[i] = log_probs[c]
+                else:
+                    scores[i] = -1e4
             scores = np.exp(scores) / np.sum(np.exp(scores))
+            logging.info(f"VLM output: {log_probs}")
+            logging.info(f"VLM scores: {scores}")
         else:
             logging.info("Not all choices considered, retrying")
             retry_limit -= 1
@@ -176,15 +185,15 @@ def format_global_selection(question, img):
     content.append((text, img))
     
     text = f"\nConsider the question: '{question}', and you will explore the environment for answering it. Is there any direction shown in the image worth exploring?\n"
-    text = "Answer with Yes/No\n"
-    #text += "you can show the reason for your confidence score but put it in a new line after the choice.\n"
+    text += "Answer with \"Yes\" or \"No\"\n"
+    content.append((text,))
     return sys_prompt, content
 
 def get_global_value(question, img):
     sys_prompt, content = format_global_selection(question, img)
     retry_limit = 3
     while retry_limit > 0:
-        response = call_openai_api(sys_prompt, content)
+        response = call_openai_api(sys_prompt, content, ["Yes", "No"])
         if response is None:
             logging.info("Invalid response, retrying")
             retry_limit -= 1

@@ -35,13 +35,8 @@ from src.habitat import (
     get_quaternion
 )
 from src.geom import get_cam_intr, get_scene_bnds
-#from src.vlm import VLM
 from src.tsdf import TSDFPlanner
 from loader import *
-#from keys import hf_token
-#hf_token = os.getenv('HF_TOKEN')
-from huggingface_hub import login
-import json
 from gpt_utils import get_confidence, get_directions, get_global_value
 
 # turn the agent around and collect the observation for answering the question
@@ -73,25 +68,6 @@ def main(cfg):
     cam_intr = get_cam_intr(cfg.hfov, img_height, img_width)
 
     # Load dataset
-    '''
-    with open(cfg.question_data_path) as f:
-        questions_data = [
-            {k: v for k, v in row.items()}
-            for row in csv.DictReader(f, skipinitialspace=True)
-        ]
-    with open(cfg.init_pose_data_path) as f:
-        init_pose_data = {}
-        for row in csv.DictReader(f, skipinitialspace=True):
-            init_pose_data[row["scene_floor"]] = {
-                "init_pts": [
-                    float(row["init_x"]),
-                    float(row["init_y"]),
-                    float(row["init_z"]),
-                ],
-                "init_angle": float(row["init_angle"]),
-            }
-    logging.info(f"Loaded {len(questions_data)} questions.")
-    '''
     #scenes, question_ids = load_info(cfg.question_data_path)
     scenes, questions = load_info_eval(cfg.question_data_path)
     # Load VLM
