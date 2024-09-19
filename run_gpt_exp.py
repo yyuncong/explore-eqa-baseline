@@ -1,5 +1,5 @@
 """
-Run EQA in Habitat-Sim with VLM exploration.
+Run EQA in Habitat-Sim with gpt exploration.
 
 """
 
@@ -41,6 +41,7 @@ from loader import *
 from keys import hf_token
 from huggingface_hub import login
 import json
+from gpt_utils import get_confidence, get_directions, get_global_value
 
 # turn the agent around and collect the observation for answering the question
 def take_round_observation(agent,simulator,camera_tilt,pts,angle,num_obs,save_dir):
@@ -93,7 +94,7 @@ def main(cfg):
     #scenes, question_ids = load_info(cfg.question_data_path)
     scenes, questions = load_info_eval(cfg.question_data_path)
     # Load VLM
-    vlm = VLM(cfg.vlm)
+    #vlm = VLM(cfg.vlm)
     # use a placeholder for now
     #vlm = None
 
@@ -105,18 +106,7 @@ def main(cfg):
     #for question_ind in tqdm(range(len(questions_data))):
     for question_idx in tqdm(range(len(questions))):
 
-        # Extract question
-        '''
-        question_data = questions_data[question_ind]
-        scene = question_data["scene"]
-        floor = question_data["floor"]
-        scene_floor = scene + "_" + floor
-        question = question_data["question"]
-        choices = [c.split("'")[1] for c in question_data["choices"].split("',")]
-        answer = question_data["answer"]
-        init_pts = init_pose_data[scene_floor]["init_pts"]
-        init_angle = init_pose_data[scene_floor]["init_angle"]
-        '''
+        
         #scene, question, answer, init_pts, init_angle = load_question_data(cfg.question_data_path,question_id)
         scene, question_id, question, answer, init_pts, init_angle = load_question_eval(questions[question_idx])
         logging.info(f"current scene: {scene}")
@@ -124,14 +114,6 @@ def main(cfg):
         #logging.info(f"\n========\nIndex: {question_ind} Scene: {scene} Floor: {floor}")
         scene_path_dict = load_scene(cfg,scene)
 
-        # Re-format the question to follow LLaMA style
-        '''
-        vlm_question = question
-        vlm_pred_candidates = ["A", "B", "C", "D"]
-        for token, choice in zip(vlm_pred_candidates, choices):
-            vlm_question += "\n" + token + "." + " " + choice
-        logging.info(f"Question:\n{question} \nAnswer: {answer}")
-        '''
         # Set data dir for this question - set initial data to be saved
         episode_data_dir = os.path.join(cfg.output_dir, str(question_id))
         print('output_dir:',cfg.output_dir)
@@ -266,9 +248,10 @@ def main(cfg):
                 # no need to predict choices in open-ended questions
                 # Get VLM relevancy
                 rgb_im = Image.fromarray(rgb, mode="RGBA").convert("RGB")
-                prompt_rel = f"\nConsider the question: '{question}'. Are you confident about answering the question with the current view? Answer with Yes or No."
+                #prompt_rel = f"\nConsider the question: '{question}'. Are you confident about answering the question with the current view? Answer with Yes or No."
                 # logging.info(f"Prompt Rel: {prompt_rel}")
-                smx_vlm_rel = vlm.get_loss(rgb_im, prompt_rel, ["Yes", "No"])
+                #smx_vlm_rel = vlm.get_loss(rgb_im, prompt_rel, ["Yes", "No"])
+                smx_vlm_rel = get_confidence(question, rgb)
                 logging.info(f"Rel - Prob: {smx_vlm_rel}")
 
                 # Get frontier candidates
@@ -329,6 +312,7 @@ def main(cfg):
 
                     # get VLM reasoning for exploring
                     if cfg.use_lsv:
+                        '''
                         prompt_lsv = f"\nConsider the question: '{question}', and you will explore the environment for answering it.\nWhich direction (black letters on the image) would you explore then? Answer with a single letter."
                         # logging.info(f"Prompt Exp: {prompt_text}")
                         lsv = vlm.get_loss(
@@ -337,6 +321,9 @@ def main(cfg):
                             draw_letters[:actual_num_prompt_points],
                         )
                         lsv *= actual_num_prompt_points / 3
+                        '''
+                        lsv = get_directions(question, rgb_img_draw, draw_letters[:actual_num_prompt_points])
+                        lsv *= actual_num_prompt_points / 3
                     else:
                         lsv = (
                             np.ones(actual_num_prompt_points) / actual_num_prompt_points
@@ -344,9 +331,10 @@ def main(cfg):
 
                     # base - use image without label
                     if cfg.use_gsv:
-                        prompt_gsv = f"\nConsider the question: '{question}', and you will explore the environment for answering it. Is there any direction shown in the image worth exploring? Answer with Yes or No."
+                        #prompt_gsv = f"\nConsider the question: '{question}', and you will explore the environment for answering it. Is there any direction shown in the image worth exploring? Answer with Yes or No."
                         # logging.info(f"Prompt Exp base: {prompt_gsv}")
-                        gsv = vlm.get_loss(rgb_im, prompt_gsv, ["Yes", "No"])[0]
+                        #gsv = vlm.get_loss(rgb_im, prompt_gsv, ["Yes", "No"])[0]
+                        gsv = get_global_value(question, rgb_im)
                         gsv = (
                             np.exp(gsv / cfg.gsv_T) / cfg.gsv_F
                         )  # scale before combined with lsv

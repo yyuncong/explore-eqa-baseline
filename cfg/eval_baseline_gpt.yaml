@@ -1,6 +1,6 @@
 # General
 seed: 42
-exp_name: vlm_baseline_eval_single_floor_new_7b
+exp_name: vlm_baseline_eval_gpt
 output_parent_dir: /project/pi_chuangg_umass_edu/yuncong/results/
 scene_dataset_config_path: "data/hm3d_annotated_basis.scene_dataset_config.json"
 scene_data_path_train: /project/pi_chuangg_umass_edu/yuncong/data_v2/scene_datasets/hm3d/train
@@ -27,12 +27,6 @@ use_best: false
 
 confidence_threshold: 0.4
 # Question answering
-vlm:
-  hf_token: 
-  device: cuda
-  model_id: prism-dinosiglip+7b
-  # revise the model storage path
-  cache_dir: /work/pi_chuangg_umass_edu/yuncong/vlm_cache
 
 # Camera, image
 camera_height: 1.5

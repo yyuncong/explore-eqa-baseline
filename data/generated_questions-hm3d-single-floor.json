@@ -1,0 +1,2230 @@
+[
+    {
+        "question": "What is the green object in the left of the garage?",
+        "answer": "A hose",
+        "category": "object recognition",
+        "question_id": "564d876c-44f1-4915-8d4b-ab5a7728494f",
+        "episode_history": "00802-wcojb4TFT35",
+        "position": [
+            -2.8347792625427246,
+            -0.29074591398239136,
+            -14.94974136352539
+        ],
+        "rotation": [
+            -0.724639892578125,
+            0.0,
+            0.6891277432441711,
+            0.0
+        ],
+        "object_id": null,
+        "class": null
+    },
+    {
+        "question": "What is the bin with the yellow lid?",
+        "answer": "A recycling bin",
+        "category": "object recognition",
+        "question_id": "77c6644e-6018-4ef3-a683-276d3d2af67f",
+        "episode_history": "00802-wcojb4TFT35",
+        "position": [
+            -2.8347792625427246,
+            -0.29074591398239136,
+            -14.94974136352539
+        ],
+        "rotation": [
+            -0.724639892578125,
+            0.0,
+            0.6891277432441711,
+            0.0
+        ],
+        "object_id": null,
+        "class": null
+    },
+    {
+        "question": "What color is the car?",
+        "answer": "Blue",
+        "category": "attribute recognition",
+        "question_id": "a86ef102-5500-4fbf-8fae-cdbeb20a3b7b",
+        "episode_history": "00802-wcojb4TFT35",
+        "position": [
+            -2.8347792625427246,
+            -0.29074591398239136,
+            -14.94974136352539
+        ],
+        "rotation": [
+            -0.724639892578125,
+            0.0,
+            0.6891277432441711,
+            0.0
+        ],
+        "object_id": null,
+        "class": null
+    },
+    {
+        "question": "What material is the floor?",
+        "answer": "concrete",
+        "category": "attribute recognition",
+        "question_id": "438e8c6f-f27d-4d3d-b13d-6f41c2981c2a",
+        "episode_history": "00802-wcojb4TFT35",
+        "position": [
+            -2.8347792625427246,
+            -0.29074591398239136,
+            -14.94974136352539
+        ],
+        "rotation": [
+            -0.724639892578125,
+            0.0,
+            0.6891277432441711,
+            0.0
+        ],
+        "object_id": null,
+        "class": null
+    },
+    {
+        "question": "What is on the top shelf to the right side of the garage?",
+        "answer": "An ice cooler",
+        "category": "spatial understanding",
+        "question_id": "9b4a7fbb-680d-4e39-8d60-7b1e521f3108",
+        "episode_history": "00802-wcojb4TFT35",
+        "position": [
+            -2.8347792625427246,
+            -0.29074591398239136,
+            -14.94974136352539
+        ],
+        "rotation": [
+            -0.724639892578125,
+            0.0,
+            0.6891277432441711,
+            0.0
+        ],
+        "object_id": null,
+        "class": null
+    },
+    {
+        "question": "Is the garbage bin open?",
+        "answer": "Yes.",
+        "category": "object state recognition",
+        "question_id": "35bfcf60-4227-4bbb-9213-e1bf643b2325",
+        "episode_history": "00802-wcojb4TFT35",
+        "position": [
+            -2.8347792625427246,
+            -0.29074591398239136,
+            -14.94974136352539
+        ],
+        "rotation": [
+            -0.724639892578125,
+            0.0,
+            0.6891277432441711,
+            0.0
+        ],
+        "object_id": null,
+        "class": null
+    },
+    {
+        "question": "Is the house doorway open or closed?q",
+        "answer": "Open",
+        "category": "object state recognition",
+        "question_id": "3a803472-47cd-4903-8380-d0b00efbbf08",
+        "episode_history": "00802-wcojb4TFT35",
+        "position": [
+            -2.8347792625427246,
+            -0.29074591398239136,
+            -14.94974136352539
+        ],
+        "rotation": [
+            -0.724639892578125,
+            0.0,
+            0.6891277432441711,
+            0.0
+        ],
+        "object_id": null,
+        "class": null
+    },
+    {
+        "question": "What can I use to water my plants?",
+        "answer": "The green hose",
+        "category": "functional reasoning",
+        "question_id": "87019892-7a7f-4ce0-b1e6-4c0d6e87b90a",
+        "episode_history": "00802-wcojb4TFT35",
+        "position": [
+            -2.8347792625427246,
+            -0.29074591398239136,
+            -14.94974136352539
+        ],
+        "rotation": [
+            -0.724639892578125,
+            0.0,
+            0.6891277432441711,
+            0.0
+        ],
+        "object_id": null,
+        "class": null
+    },
+    {
+        "question": "What can I use to keep drinks cold at a picnic?",
+        "answer": "The blue cooler",
+        "category": "functional reasoning",
+        "question_id": "6fddec60-f221-4944-88c3-a132dfbfd1ed",
+        "episode_history": "00802-wcojb4TFT35",
+        "position": [
+            -2.8347792625427246,
+            -0.29074591398239136,
+            -14.94974136352539
+        ],
+        "rotation": [
+            -0.724639892578125,
+            0.0,
+            0.6891277432441711,
+            0.0
+        ],
+        "object_id": null,
+        "class": null
+    },
+    {
+        "question": "What type of car is in the garage?",
+        "answer": "A sedan",
+        "category": "world knowledge",
+        "question_id": "7f15d867-8ba6-47fa-9bca-9d9ae64046b7",
+        "episode_history": "00802-wcojb4TFT35",
+        "position": [
+            -2.8347792625427246,
+            -0.29074591398239136,
+            -14.94974136352539
+        ],
+        "rotation": [
+            -0.724639892578125,
+            0.0,
+            0.6891277432441711,
+            0.0
+        ],
+        "object_id": null,
+        "class": null
+    },
+    {
+        "question": "Which bin should I put paper in?",
+        "answer": "The bin with the yellow lid.",
+        "category": "world knowledge",
+        "question_id": "025257b6-8b7e-4f6f-aacc-1788069cbfad",
+        "episode_history": "00802-wcojb4TFT35",
+        "position": [
+            -2.8347792625427246,
+            -0.29074591398239136,
+            -14.94974136352539
+        ],
+        "rotation": [
+            -0.724639892578125,
+            0.0,
+            0.6891277432441711,
+            0.0
+        ],
+        "object_id": null,
+        "class": null
+    },
+    {
+        "question": "Where is the garage opener?",
+        "answer": "To the left of the house doorway",
+        "category": "object localization",
+        "question_id": "28ea4932-55bf-44b3-9a48-73fde896b8ce",
+        "episode_history": "00802-wcojb4TFT35",
+        "extra_answers": [
+            "next to the entrance from the house",
+            "near the door",
+            "To the left of the door into the house.",
+            "Near the door."
+        ],
+        "position": [
+            -2.8347792625427246,
+            -0.29074591398239136,
+            -14.94974136352539
+        ],
+        "rotation": [
+            -0.724639892578125,
+            0.0,
+            0.6891277432441711,
+            0.0
+        ],
+        "object_id": null,
+        "class": null
+    },
+    {
+        "question": "Where is the broom?",
+        "answer": "Below the garage door opener",
+        "category": "object localization",
+        "question_id": "30d3104b-cc05-4860-83e8-255fe8311662",
+        "episode_history": "00802-wcojb4TFT35",
+        "extra_answers": [
+            "next to the entrance to the house",
+            "near the door",
+            "In the corner by the garage door opener.",
+            "To the left of the stairs into the house."
+        ],
+        "position": [
+            -2.8347792625427246,
+            -0.29074591398239136,
+            -14.94974136352539
+        ],
+        "rotation": [
+            -0.724639892578125,
+            0.0,
+            0.6891277432441711,
+            0.0
+        ],
+        "object_id": null,
+        "class": null
+    },
+    {
+        "question": "What is hanging from the ceiling in the bedroom?",
+        "answer": "A ceiling fan",
+        "category": "object recognition",
+        "question_id": "f0c66afc-5899-4b99-a25a-756f8e4d3796",
+        "episode_history": "00853-5cdEh9F2hJL",
+        "position": [
+            -4.755180358886719,
+            0.29464560747146606,
+            4.835386276245117
+        ],
+        "rotation": [
+            -0.4670323133468628,
+            0.0,
+            0.8842402696609497,
+            0.0
+        ],
+        "object_id": null,
+        "class": null
+    },
+    {
+        "question": "What is above the bed?",
+        "answer": "Two paintings",
+        "category": "object recognition",
+        "question_id": "5b1a106a-0732-43f9-b6b7-108e94ad3b07",
+        "episode_history": "00853-5cdEh9F2hJL",
+        "position": [
+            -4.755180358886719,
+            0.29464560747146606,
+            4.835386276245117
+        ],
+        "rotation": [
+            -0.4670323133468628,
+            0.0,
+            0.8842402696609497,
+            0.0
+        ],
+        "object_id": null,
+        "class": null
+    },
+    {
+        "question": "What is the color of the walls in the bedroom?",
+        "answer": "Light blue",
+        "category": "attribute recognition",
+        "question_id": "c5a16c11-e855-4abe-bfe5-33df48982386",
+        "episode_history": "00853-5cdEh9F2hJL",
+        "position": [
+            -4.755180358886719,
+            0.29464560747146606,
+            4.835386276245117
+        ],
+        "rotation": [
+            -0.4670323133468628,
+            0.0,
+            0.8842402696609497,
+            0.0
+        ],
+        "object_id": null,
+        "class": null
+    },
+    {
+        "question": "What is above the painting with the red flowers?",
+        "answer": "An air vent",
+        "category": "spatial understanding",
+        "question_id": "8d518bf1-6e9d-4e34-bbdc-bf84ef7e28e3",
+        "episode_history": "00853-5cdEh9F2hJL",
+        "position": [
+            -4.755180358886719,
+            0.29464560747146606,
+            4.835386276245117
+        ],
+        "rotation": [
+            -0.4670323133468628,
+            0.0,
+            0.8842402696609497,
+            0.0
+        ],
+        "object_id": null,
+        "class": null
+    },
+    {
+        "question": "Is there room for a desk in the bedroom?",
+        "answer": "No",
+        "category": "spatial understanding",
+        "question_id": "decee266-85d8-46d6-940a-d8eb2af15bbe",
+        "episode_history": "00853-5cdEh9F2hJL",
+        "position": [
+            -4.755180358886719,
+            0.29464560747146606,
+            4.835386276245117
+        ],
+        "rotation": [
+            -0.4670323133468628,
+            0.0,
+            0.8842402696609497,
+            0.0
+        ],
+        "object_id": null,
+        "class": null
+    },
+    {
+        "question": "Are the closet lights turned on?",
+        "answer": "Yes",
+        "category": "object state recognition",
+        "question_id": "c496cdf1-762c-4403-8261-1e680de59db2",
+        "episode_history": "00853-5cdEh9F2hJL",
+        "position": [
+            -4.755180358886719,
+            0.29464560747146606,
+            4.835386276245117
+        ],
+        "rotation": [
+            -0.4670323133468628,
+            0.0,
+            0.8842402696609497,
+            0.0
+        ],
+        "object_id": null,
+        "class": null
+    },
+    {
+        "question": "Are both doors in the bedroom open?",
+        "answer": "No.",
+        "category": "object state recognition",
+        "question_id": "c36331e1-d0b6-4f58-9f44-5590887b6677",
+        "episode_history": "00853-5cdEh9F2hJL",
+        "position": [
+            -4.755180358886719,
+            0.29464560747146606,
+            4.835386276245117
+        ],
+        "rotation": [
+            -0.4670323133468628,
+            0.0,
+            0.8842402696609497,
+            0.0
+        ],
+        "object_id": null,
+        "class": null
+    },
+    {
+        "question": "Where can I put my shoes?",
+        "answer": "On the hanging shoe rack in the closet",
+        "category": "functional reasoning",
+        "question_id": "cf0e325d-cbd9-4206-94e6-db3ca30d2b03",
+        "episode_history": "00853-5cdEh9F2hJL",
+        "position": [
+            -4.755180358886719,
+            0.29464560747146606,
+            4.835386276245117
+        ],
+        "rotation": [
+            -0.4670323133468628,
+            0.0,
+            0.8842402696609497,
+            0.0
+        ],
+        "object_id": null,
+        "class": null
+    },
+    {
+        "question": "How can I cool myself off?",
+        "answer": "Turn on the ceiling fan",
+        "category": "functional reasoning",
+        "question_id": "ea4cf5a5-87e8-4f0e-8315-6ca5e8eebb43",
+        "episode_history": "00853-5cdEh9F2hJL",
+        "position": [
+            -4.755180358886719,
+            0.29464560747146606,
+            4.835386276245117
+        ],
+        "rotation": [
+            -0.4670323133468628,
+            0.0,
+            0.8842402696609497,
+            0.0
+        ],
+        "object_id": null,
+        "class": null
+    },
+    {
+        "question": "What does the painting in the bathroom depict?",
+        "answer": "A pier",
+        "category": "world knowledge",
+        "question_id": "7cd9b285-813c-4840-84de-37e05c028ea5",
+        "episode_history": "00853-5cdEh9F2hJL",
+        "position": [
+            -4.755180358886719,
+            0.29464560747146606,
+            4.835386276245117
+        ],
+        "rotation": [
+            -0.4670323133468628,
+            0.0,
+            0.8842402696609497,
+            0.0
+        ],
+        "object_id": null,
+        "class": null
+    },
+    {
+        "question": "What is depicted on the painting above the bed?",
+        "answer": "White flowers",
+        "category": "world knowledge",
+        "question_id": "a72012b4-5cc2-49a2-a947-2792da0d8b0d",
+        "episode_history": "00853-5cdEh9F2hJL",
+        "position": [
+            -4.755180358886719,
+            0.29464560747146606,
+            4.835386276245117
+        ],
+        "rotation": [
+            -0.4670323133468628,
+            0.0,
+            0.8842402696609497,
+            0.0
+        ],
+        "object_id": null,
+        "class": null
+    },
+    {
+        "question": "Where is the full body mirror?",
+        "answer": "In the bedroom by the door",
+        "category": "object localization",
+        "question_id": "69376f0e-ffd7-4d04-aad3-6089bacfc1d3",
+        "episode_history": "00853-5cdEh9F2hJL",
+        "extra_answers": [
+            "next to the bedroom door",
+            "just inside the bedroom",
+            "in the bedroom",
+            "in the bedroom right next to the door"
+        ],
+        "position": [
+            -4.755180358886719,
+            0.29464560747146606,
+            4.835386276245117
+        ],
+        "rotation": [
+            -0.4670323133468628,
+            0.0,
+            0.8842402696609497,
+            0.0
+        ],
+        "object_id": null,
+        "class": null
+    },
+    {
+        "question": "Where are the orange flowers?",
+        "answer": "Outside the bedroom in a vase on the ground",
+        "category": "object localization",
+        "question_id": "361460f8-257d-4fde-b777-0446047d6160",
+        "episode_history": "00853-5cdEh9F2hJL",
+        "extra_answers": [
+            "outside the bedroom door",
+            "in the hallway outside the bedroom",
+            "in the hallway next to the brown console table",
+            "under a big painting of red flowers"
+        ],
+        "position": [
+            -4.755180358886719,
+            0.29464560747146606,
+            4.835386276245117
+        ],
+        "rotation": [
+            -0.4670323133468628,
+            0.0,
+            0.8842402696609497,
+            0.0
+        ],
+        "object_id": null,
+        "class": null
+    },
+    {
+        "question": "What is above the wooden table in the living room?",
+        "answer": "A blue, white, and orange painting",
+        "category": "object recognition",
+        "question_id": "a605c40f-96e7-4bec-a1cb-6d48e88e39cd",
+        "episode_history": "00824-Dd4bFSTQ8gi",
+        "position": [
+            6.892691135406494,
+            0.06882420182228088,
+            1.4872137308120728
+        ],
+        "rotation": [
+            0.37141478061676025,
+            0.0,
+            0.9284670948982239,
+            0.0
+        ],
+        "object_id": null,
+        "class": null
+    },
+    {
+        "question": "What color are the pillows in the kitchen?",
+        "answer": "Blue",
+        "category": "attribute recognition",
+        "question_id": "3a5be057-47d2-4f78-98a9-729ef19b3d8b",
+        "episode_history": "00824-Dd4bFSTQ8gi",
+        "position": [
+            6.892691135406494,
+            0.06882420182228088,
+            1.4872137308120728
+        ],
+        "rotation": [
+            0.37141478061676025,
+            0.0,
+            0.9284670948982239,
+            0.0
+        ],
+        "object_id": null,
+        "class": null
+    },
+    {
+        "question": "What color is the front door?",
+        "answer": "Brown",
+        "category": "attribute recognition",
+        "question_id": "30dc765d-80c3-4901-9c69-65e6b48e254a",
+        "episode_history": "00824-Dd4bFSTQ8gi",
+        "position": [
+            6.892691135406494,
+            0.06882420182228088,
+            1.4872137308120728
+        ],
+        "rotation": [
+            0.37141478061676025,
+            0.0,
+            0.9284670948982239,
+            0.0
+        ],
+        "object_id": null,
+        "class": null
+    },
+    {
+        "question": "What is to the left of the frontdoor?",
+        "answer": "A storage closet",
+        "category": "spatial understanding",
+        "question_id": "f5a17a09-ce4b-4123-bf40-d2239cf38cb8",
+        "episode_history": "00824-Dd4bFSTQ8gi",
+        "position": [
+            6.892691135406494,
+            0.06882420182228088,
+            1.4872137308120728
+        ],
+        "rotation": [
+            0.37141478061676025,
+            0.0,
+            0.9284670948982239,
+            0.0
+        ],
+        "object_id": null,
+        "class": null
+    },
+    {
+        "question": "What is hanging from the oven handle?",
+        "answer": "A towel",
+        "category": "spatial understanding",
+        "question_id": "00c2be2a-1377-4fae-a889-30936b7890c3",
+        "episode_history": "00824-Dd4bFSTQ8gi",
+        "position": [
+            6.892691135406494,
+            0.06882420182228088,
+            1.4872137308120728
+        ],
+        "rotation": [
+            0.37141478061676025,
+            0.0,
+            0.9284670948982239,
+            0.0
+        ],
+        "object_id": null,
+        "class": null
+    },
+    {
+        "question": "Is the light above the sink turned on?",
+        "answer": "Yes",
+        "category": "object state recognition",
+        "question_id": "4dbd213e-56cd-481a-8ff5-ed9a8d636dbc",
+        "episode_history": "00824-Dd4bFSTQ8gi",
+        "position": [
+            6.892691135406494,
+            0.06882420182228088,
+            1.4872137308120728
+        ],
+        "rotation": [
+            0.37141478061676025,
+            0.0,
+            0.9284670948982239,
+            0.0
+        ],
+        "object_id": null,
+        "class": null
+    },
+    {
+        "question": "Where can I warm up?",
+        "answer": "Next to the fireplace",
+        "category": "functional reasoning",
+        "question_id": "6d132959-fd48-4fef-a736-4e5853849547",
+        "episode_history": "00824-Dd4bFSTQ8gi",
+        "position": [
+            6.892691135406494,
+            0.06882420182228088,
+            1.4872137308120728
+        ],
+        "rotation": [
+            0.37141478061676025,
+            0.0,
+            0.9284670948982239,
+            0.0
+        ],
+        "object_id": null,
+        "class": null
+    },
+    {
+        "question": "Where can I get recipes for what to cook?",
+        "answer": "The open cookbook on the kitchen counter top",
+        "category": "functional reasoning",
+        "question_id": "ae19adeb-498a-4814-b955-e0af05623f9b",
+        "episode_history": "00824-Dd4bFSTQ8gi",
+        "position": [
+            6.892691135406494,
+            0.06882420182228088,
+            1.4872137308120728
+        ],
+        "rotation": [
+            0.37141478061676025,
+            0.0,
+            0.9284670948982239,
+            0.0
+        ],
+        "object_id": null,
+        "class": null
+    },
+    {
+        "question": "What is shown on the painting above the couch?",
+        "answer": "Horses",
+        "category": "world knowledge",
+        "question_id": "cbffc0cd-04aa-4686-97bf-887c0dc840bd",
+        "episode_history": "00824-Dd4bFSTQ8gi",
+        "position": [
+            6.892691135406494,
+            0.06882420182228088,
+            1.4872137308120728
+        ],
+        "rotation": [
+            0.37141478061676025,
+            0.0,
+            0.9284670948982239,
+            0.0
+        ],
+        "object_id": null,
+        "class": null
+    },
+    {
+        "question": "Where can I get drinking water in the kitchen?",
+        "answer": "From water dispenser in the fridge",
+        "category": "world knowledge",
+        "question_id": "4cc4212e-0db2-421f-8bb5-93817e58f9b4",
+        "episode_history": "00824-Dd4bFSTQ8gi",
+        "position": [
+            6.892691135406494,
+            0.06882420182228088,
+            1.4872137308120728
+        ],
+        "rotation": [
+            0.37141478061676025,
+            0.0,
+            0.9284670948982239,
+            0.0
+        ],
+        "object_id": null,
+        "class": null
+    },
+    {
+        "question": "Where is the microwave?",
+        "answer": "Above the stovetop",
+        "category": "object localization",
+        "question_id": "7ebac357-a338-4ce0-975a-62141e90a3c3",
+        "episode_history": "00824-Dd4bFSTQ8gi",
+        "extra_answers": [
+            "Over the stove.",
+            "Over the open cookbook.",
+            "above the stove top",
+            "above the book right next to the stove"
+        ],
+        "position": [
+            6.892691135406494,
+            0.06882420182228088,
+            1.4872137308120728
+        ],
+        "rotation": [
+            0.37141478061676025,
+            0.0,
+            0.9284670948982239,
+            0.0
+        ],
+        "object_id": null,
+        "class": null
+    },
+    {
+        "question": "What is above the light switch?",
+        "answer": "A circuit breaker box",
+        "category": "object recognition",
+        "question_id": "5d538466-397e-4b3b-8d40-d32bc80d5c0b",
+        "episode_history": "00808-y9hTuugGdiq",
+        "position": [
+            -2.7008867263793945,
+            0.06139111518859863,
+            1.6667211055755615
+        ],
+        "rotation": [
+            0.9634894132614136,
+            0.0,
+            0.2677465081214905,
+            0.0
+        ],
+        "object_id": null,
+        "class": null
+    },
+    {
+        "question": "What white object can be partially seen in the room across the bedroom? ",
+        "answer": "A laundry machine",
+        "category": "object recognition",
+        "question_id": "0cbe9fd8-0b2c-40ce-9e9e-bd883fb7bff5",
+        "episode_history": "00808-y9hTuugGdiq",
+        "position": [
+            -2.7008867263793945,
+            0.06139111518859863,
+            1.6667211055755615
+        ],
+        "rotation": [
+            0.9634894132614136,
+            0.0,
+            0.2677465081214905,
+            0.0
+        ],
+        "object_id": null,
+        "class": null
+    },
+    {
+        "question": "What color are the patio chairs?",
+        "answer": "Brown",
+        "category": "attribute recognition",
+        "question_id": "55f022a0-2bd2-410b-9323-e077908a55d2",
+        "episode_history": "00808-y9hTuugGdiq",
+        "position": [
+            -2.7008867263793945,
+            0.06139111518859863,
+            1.6667211055755615
+        ],
+        "rotation": [
+            0.9634894132614136,
+            0.0,
+            0.2677465081214905,
+            0.0
+        ],
+        "object_id": null,
+        "class": null
+    },
+    {
+        "question": "What color is the bed frame?",
+        "answer": "White",
+        "category": "attribute recognition",
+        "question_id": "e87b90d9-77d5-4f99-b44a-ad1d11480334",
+        "episode_history": "00808-y9hTuugGdiq",
+        "position": [
+            -2.7008867263793945,
+            0.06139111518859863,
+            1.6667211055755615
+        ],
+        "rotation": [
+            0.9634894132614136,
+            0.0,
+            0.2677465081214905,
+            0.0
+        ],
+        "object_id": null,
+        "class": null
+    },
+    {
+        "question": "What is across the dishwasher?",
+        "answer": "A fridge",
+        "category": "spatial understanding",
+        "question_id": "b60453d8-d274-4159-b368-96e8ad66575f",
+        "episode_history": "00808-y9hTuugGdiq",
+        "position": [
+            -2.7008867263793945,
+            0.06139111518859863,
+            1.6667211055755615
+        ],
+        "rotation": [
+            0.9634894132614136,
+            0.0,
+            0.2677465081214905,
+            0.0
+        ],
+        "object_id": null,
+        "class": null
+    },
+    {
+        "question": "What appliance is below the hanging cabinets on the left side of the kitchen?",
+        "answer": "A toaster oven",
+        "category": "spatial understanding",
+        "question_id": "4af07938-5cb6-4784-922d-893dc57ca225",
+        "episode_history": "00808-y9hTuugGdiq",
+        "position": [
+            -2.7008867263793945,
+            0.06139111518859863,
+            1.6667211055755615
+        ],
+        "rotation": [
+            0.9634894132614136,
+            0.0,
+            0.2677465081214905,
+            0.0
+        ],
+        "object_id": null,
+        "class": null
+    },
+    {
+        "question": "Are the drapes in the bedroom open or closed?",
+        "answer": "Open",
+        "category": "object state recognition",
+        "question_id": "bb1f77da-2f24-45e4-af20-10d82c300c06",
+        "episode_history": "00808-y9hTuugGdiq",
+        "position": [
+            -2.7008867263793945,
+            0.06139111518859863,
+            1.6667211055755615
+        ],
+        "rotation": [
+            0.9634894132614136,
+            0.0,
+            0.2677465081214905,
+            0.0
+        ],
+        "object_id": null,
+        "class": null
+    },
+    {
+        "question": "Are the blinds in the living room all open or all closed?",
+        "answer": "Neither, some are open some are closed",
+        "category": "object state recognition",
+        "question_id": "0785d52a-eb84-4159-9aff-54b20f79fa5f",
+        "episode_history": "00808-y9hTuugGdiq",
+        "position": [
+            -2.7008867263793945,
+            0.06139111518859863,
+            1.6667211055755615
+        ],
+        "rotation": [
+            0.9634894132614136,
+            0.0,
+            0.2677465081214905,
+            0.0
+        ],
+        "object_id": null,
+        "class": null
+    },
+    {
+        "question": "Where would the garbage disposal switch be located?",
+        "answer": "The switches to the right of the sink",
+        "category": "functional reasoning",
+        "question_id": "da1d2adf-7888-4c94-80d7-b84f09a25682",
+        "episode_history": "00808-y9hTuugGdiq",
+        "position": [
+            -2.7008867263793945,
+            0.06139111518859863,
+            1.6667211055755615
+        ],
+        "rotation": [
+            0.9634894132614136,
+            0.0,
+            0.2677465081214905,
+            0.0
+        ],
+        "object_id": null,
+        "class": null
+    },
+    {
+        "question": "If the lights suddenly go out, where should I go to fix it?",
+        "answer": "The circuit breaker box to the left of the laundry room",
+        "category": "functional reasoning",
+        "question_id": "e5c3d2bd-ef67-46a5-badc-f6c9f1421be2",
+        "episode_history": "00808-y9hTuugGdiq",
+        "position": [
+            -2.7008867263793945,
+            0.06139111518859863,
+            1.6667211055755615
+        ],
+        "rotation": [
+            0.9634894132614136,
+            0.0,
+            0.2677465081214905,
+            0.0
+        ],
+        "object_id": null,
+        "class": null
+    },
+    {
+        "question": "What kind of staircase does this home have?",
+        "answer": "A spiral staircase",
+        "category": "world knowledge",
+        "question_id": "9d9d4db5-7028-48a6-a62b-e62ec13d0393",
+        "episode_history": "00808-y9hTuugGdiq",
+        "position": [
+            -2.7008867263793945,
+            0.06139111518859863,
+            1.6667211055755615
+        ],
+        "rotation": [
+            0.9634894132614136,
+            0.0,
+            0.2677465081214905,
+            0.0
+        ],
+        "object_id": null,
+        "class": null
+    },
+    {
+        "question": "Where can I get a drink of water?",
+        "answer": "From the water dispenser in the fridge",
+        "category": "world knowledge",
+        "question_id": "13d097e7-12c7-48e0-92c4-9667fc7f9c60",
+        "episode_history": "00808-y9hTuugGdiq",
+        "position": [
+            -2.7008867263793945,
+            0.06139111518859863,
+            1.6667211055755615
+        ],
+        "rotation": [
+            0.9634894132614136,
+            0.0,
+            0.2677465081214905,
+            0.0
+        ],
+        "object_id": null,
+        "class": null
+    },
+    {
+        "question": "Where are the paper towels?",
+        "answer": "Above the dishwasher",
+        "category": "object localization",
+        "question_id": "b38045c3-cf3d-43e3-8fee-a085b89a4d3a",
+        "episode_history": "00808-y9hTuugGdiq",
+        "extra_answers": [
+            "On the kitchen, at the right of the sink",
+            "On the kitchen above the dishwasher",
+            "near the kitchen breakfast bar",
+            "next to the toaster"
+        ],
+        "position": [
+            -2.7008867263793945,
+            0.06139111518859863,
+            1.6667211055755615
+        ],
+        "rotation": [
+            0.9634894132614136,
+            0.0,
+            0.2677465081214905,
+            0.0
+        ],
+        "object_id": null,
+        "class": null
+    },
+    {
+        "question": "Where is the umbrella?",
+        "answer": "On the balcony outside",
+        "category": "object localization",
+        "question_id": "5a8b3936-43e0-4474-ac15-efaf488265a1",
+        "episode_history": "00808-y9hTuugGdiq",
+        "extra_answers": [
+            "Outside the house, on the balcony",
+            "On the porche",
+            "on the back deck",
+            "outside over the table"
+        ],
+        "position": [
+            -2.7008867263793945,
+            0.06139111518859863,
+            1.6667211055755615
+        ],
+        "rotation": [
+            0.9634894132614136,
+            0.0,
+            0.2677465081214905,
+            0.0
+        ],
+        "object_id": null,
+        "class": null
+    },
+    {
+        "question": "What color is the curtain over the sink?",
+        "answer": "Green",
+        "category": "attribute recognition",
+        "question_id": "406684f7-f87a-4360-8c90-42725b8fcfd2",
+        "episode_history": "00871-VBzV5z6i1WS",
+        "position": [
+            -6.768316745758057,
+            0.046541884541511536,
+            -2.06489896774292
+        ],
+        "rotation": [
+            0.9770541191101074,
+            0.0,
+            0.21299141645431519,
+            0.0
+        ],
+        "object_id": null,
+        "class": null
+    },
+    {
+        "question": "What kind of pants is the man in the mirror wearing?",
+        "answer": "Jeans",
+        "category": "attribute recognition",
+        "question_id": "06c9b25c-b117-4b8f-a052-6fd71b2bb043",
+        "episode_history": "00871-VBzV5z6i1WS",
+        "position": [
+            -6.768316745758057,
+            0.046541884541511536,
+            -2.06489896774292
+        ],
+        "rotation": [
+            0.9770541191101074,
+            0.0,
+            0.21299141645431519,
+            0.0
+        ],
+        "object_id": null,
+        "class": null
+    },
+    {
+        "question": "Is the coffee pot full or empty?",
+        "answer": "Full",
+        "category": "object state recognition",
+        "question_id": "08c5d44c-4500-4c11-a2ca-d2cf924c0b46",
+        "episode_history": "00871-VBzV5z6i1WS",
+        "position": [
+            -6.768316745758057,
+            0.046541884541511536,
+            -2.06489896774292
+        ],
+        "rotation": [
+            0.9770541191101074,
+            0.0,
+            0.21299141645431519,
+            0.0
+        ],
+        "object_id": null,
+        "class": null
+    },
+    {
+        "question": "It's too bright in the living room, how can I make it darker?",
+        "answer": "Lower the shades over the porch door.",
+        "category": "functional reasoning",
+        "question_id": "7ad70423-200c-42a8-8e6a-c471f171782e",
+        "episode_history": "00871-VBzV5z6i1WS",
+        "position": [
+            -6.768316745758057,
+            0.046541884541511536,
+            -2.06489896774292
+        ],
+        "rotation": [
+            0.9770541191101074,
+            0.0,
+            0.21299141645431519,
+            0.0
+        ],
+        "object_id": null,
+        "class": null
+    },
+    {
+        "question": "If I sit in the armchair in the living room, what animal can I touch with my right hand?",
+        "answer": "An elephant",
+        "category": "world knowledge",
+        "question_id": "5fc88f40-890b-4a30-8b97-d404e8f5c330",
+        "episode_history": "00871-VBzV5z6i1WS",
+        "position": [
+            -6.768316745758057,
+            0.046541884541511536,
+            -2.06489896774292
+        ],
+        "rotation": [
+            0.9770541191101074,
+            0.0,
+            0.21299141645431519,
+            0.0
+        ],
+        "object_id": null,
+        "class": null
+    },
+    {
+        "question": "Where is the octagonal mirror?",
+        "answer": "In the first bedroom",
+        "category": "object localization",
+        "question_id": "19fd09b1-acf4-461d-9cf4-e375a062bee7",
+        "episode_history": "00871-VBzV5z6i1WS",
+        "extra_answers": [
+            "In the bedroom with salmon colored sheets",
+            "In the bedroom with the white cabinets",
+            "across the large bed",
+            "over the white dresser"
+        ],
+        "position": [
+            -6.768316745758057,
+            0.046541884541511536,
+            -2.06489896774292
+        ],
+        "rotation": [
+            0.9770541191101074,
+            0.0,
+            0.21299141645431519,
+            0.0
+        ],
+        "object_id": null,
+        "class": null
+    },
+    {
+        "question": "What is behind the armchair in the living room?",
+        "answer": "A dog bed",
+        "category": "object recognition",
+        "question_id": "e6fb0c2e-5f92-4835-ba38-6af958b7a1d3",
+        "episode_history": "00848-ziup5kvtCCR",
+        "position": [
+            0.26384106278419495,
+            0.021223172545433044,
+            7.149479389190674
+        ],
+        "rotation": [
+            0.9547726511955261,
+            0.0,
+            0.29733675718307495,
+            0.0
+        ],
+        "object_id": null,
+        "class": null
+    },
+    {
+        "question": "What is hanging on the wall in the living room?",
+        "answer": "A clock",
+        "category": "object recognition",
+        "question_id": "a36ab369-6f78-4311-a943-b6862cd28b55",
+        "episode_history": "00848-ziup5kvtCCR",
+        "position": [
+            0.26384106278419495,
+            0.021223172545433044,
+            7.149479389190674
+        ],
+        "rotation": [
+            0.9547726511955261,
+            0.0,
+            0.29733675718307495,
+            0.0
+        ],
+        "object_id": null,
+        "class": null
+    },
+    {
+        "question": "What type of numbers are on the clock?",
+        "answer": "Roman numerals",
+        "category": "attribute recognition",
+        "question_id": "0df60236-15ad-4166-a31a-a98d14214fdb",
+        "episode_history": "00848-ziup5kvtCCR",
+        "position": [
+            0.26384106278419495,
+            0.021223172545433044,
+            7.149479389190674
+        ],
+        "rotation": [
+            0.9547726511955261,
+            0.0,
+            0.29733675718307495,
+            0.0
+        ],
+        "object_id": null,
+        "class": null
+    },
+    {
+        "question": "Where is the teddy bear?",
+        "answer": "In the dog bed in the living room.",
+        "category": "object localization",
+        "question_id": "01fcc568-f51e-4e12-b976-5dc8d554135a",
+        "episode_history": "00848-ziup5kvtCCR",
+        "extra_answers": [
+            "on the baby mat next to the tv",
+            "on the ground near the tv",
+            "On the blue bed in the living room",
+            "On the blue object on the floor to the right of the telvision"
+        ],
+        "position": [
+            0.26384106278419495,
+            0.021223172545433044,
+            7.149479389190674
+        ],
+        "rotation": [
+            0.9547726511955261,
+            0.0,
+            0.29733675718307495,
+            0.0
+        ],
+        "object_id": null,
+        "class": null
+    },
+    {
+        "question": "Where is the wreath?",
+        "answer": "Hanging on the front door.",
+        "category": "object localization",
+        "question_id": "6852b358-4820-471d-9263-d32ef0cecd0b",
+        "episode_history": "00848-ziup5kvtCCR",
+        "extra_answers": [
+            "on the front door",
+            "through the glass of the front door",
+            "Below the brown blinds on the front door",
+            "In the center of the window on the front door"
+        ],
+        "position": [
+            0.26384106278419495,
+            0.021223172545433044,
+            7.149479389190674
+        ],
+        "rotation": [
+            0.9547726511955261,
+            0.0,
+            0.29733675718307495,
+            0.0
+        ],
+        "object_id": null,
+        "class": null
+    },
+    {
+        "question": "What is the grey item on the bed?",
+        "answer": "A blanket",
+        "category": "object recognition",
+        "question_id": "48d8aa7f-61cb-469b-9b6d-2549d1210281",
+        "episode_history": "00876-mv2HUxq3B53",
+        "position": [
+            -8.009016036987305,
+            0.05035419762134552,
+            8.276389122009277
+        ],
+        "rotation": [
+            -0.9870320558547974,
+            0.0,
+            0.16052371263504028,
+            0.0
+        ],
+        "object_id": null,
+        "class": null
+    },
+    {
+        "question": "What color is the countertop on the porch?",
+        "answer": "Black",
+        "category": "attribute recognition",
+        "question_id": "45a5e082-a9e9-47ca-a036-dfafba92b16c",
+        "episode_history": "00876-mv2HUxq3B53",
+        "position": [
+            -8.009016036987305,
+            0.05035419762134552,
+            8.276389122009277
+        ],
+        "rotation": [
+            -0.9870320558547974,
+            0.0,
+            0.16052371263504028,
+            0.0
+        ],
+        "object_id": null,
+        "class": null
+    },
+    {
+        "question": "What material are the stools in the kitchen made out of?",
+        "answer": "Leather",
+        "category": "attribute recognition",
+        "question_id": "013bb857-f47d-4b50-add4-023cc4ff414c",
+        "episode_history": "00876-mv2HUxq3B53",
+        "position": [
+            -8.009016036987305,
+            0.05035419762134552,
+            8.276389122009277
+        ],
+        "rotation": [
+            -0.9870320558547974,
+            0.0,
+            0.16052371263504028,
+            0.0
+        ],
+        "object_id": null,
+        "class": null
+    },
+    {
+        "question": "Where do I reach for laundry detergent?",
+        "answer": "For the shelf above the washing machine.",
+        "category": "spatial understanding",
+        "question_id": "ba5f1c9b-9a41-4a84-829b-f9b8ccd19b69",
+        "episode_history": "00876-mv2HUxq3B53",
+        "position": [
+            -8.009016036987305,
+            0.05035419762134552,
+            8.276389122009277
+        ],
+        "rotation": [
+            -0.9870320558547974,
+            0.0,
+            0.16052371263504028,
+            0.0
+        ],
+        "object_id": null,
+        "class": null
+    },
+    {
+        "question": "Is the toilet seat open or closed?",
+        "answer": "Closed.",
+        "category": "object state recognition",
+        "question_id": "f17869a2-2a4d-4ce4-b262-cb69618e3394",
+        "episode_history": "00876-mv2HUxq3B53",
+        "position": [
+            -8.009016036987305,
+            0.05035419762134552,
+            8.276389122009277
+        ],
+        "rotation": [
+            -0.9870320558547974,
+            0.0,
+            0.16052371263504028,
+            0.0
+        ],
+        "object_id": null,
+        "class": null
+    },
+    {
+        "question": "Is the television turned on or off?",
+        "answer": "On",
+        "category": "object state recognition",
+        "question_id": "e0d20472-8fa6-4e8d-880d-22d4eed3fbb8",
+        "episode_history": "00876-mv2HUxq3B53",
+        "position": [
+            -8.009016036987305,
+            0.05035419762134552,
+            8.276389122009277
+        ],
+        "rotation": [
+            -0.9870320558547974,
+            0.0,
+            0.16052371263504028,
+            0.0
+        ],
+        "object_id": null,
+        "class": null
+    },
+    {
+        "question": "I want to check my outfit for a dinner party, how can I do this?",
+        "answer": "Using the large mirror outside the first bedroom.",
+        "category": "functional reasoning",
+        "question_id": "fc9d2a18-6197-4c8b-abd8-be0c493e5450",
+        "episode_history": "00876-mv2HUxq3B53",
+        "position": [
+            -8.009016036987305,
+            0.05035419762134552,
+            8.276389122009277
+        ],
+        "rotation": [
+            -0.9870320558547974,
+            0.0,
+            0.16052371263504028,
+            0.0
+        ],
+        "object_id": null,
+        "class": null
+    },
+    {
+        "question": "I want to host a dinner party on a summer evening, where should I set the table?",
+        "answer": "On the table on the porch.",
+        "category": "world knowledge",
+        "question_id": "1b36e675-74ff-46ad-8caa-c33da46a5a67",
+        "episode_history": "00876-mv2HUxq3B53",
+        "position": [
+            -8.009016036987305,
+            0.05035419762134552,
+            8.276389122009277
+        ],
+        "rotation": [
+            -0.9870320558547974,
+            0.0,
+            0.16052371263504028,
+            0.0
+        ],
+        "object_id": null,
+        "class": null
+    },
+    {
+        "question": "Where is the round mirror?",
+        "answer": "On the wall above the head of the bed in the first bedroom.",
+        "category": "object localization",
+        "question_id": "d3742804-8363-4346-a622-5bcaeffb25e9",
+        "episode_history": "00876-mv2HUxq3B53",
+        "extra_answers": [
+            "above the bed in the first bedroom",
+            "in the first bedroom",
+            "on the wall above the bed in the first bedroom",
+            "on the wall above the pillows on the bed in the first bedroom"
+        ],
+        "position": [
+            -8.009016036987305,
+            0.05035419762134552,
+            8.276389122009277
+        ],
+        "rotation": [
+            -0.9870320558547974,
+            0.0,
+            0.16052371263504028,
+            0.0
+        ],
+        "object_id": null,
+        "class": null
+    },
+    {
+        "question": "Where is the ceiling fan?",
+        "answer": "Above the bed in the second bedroom",
+        "category": "object localization",
+        "question_id": "dfdc3b36-d98f-42a7-b2ea-dceb4af1794a",
+        "episode_history": "00876-mv2HUxq3B53",
+        "extra_answers": [
+            "in the bedroom with a patio",
+            "in the bedroom with a twin bed",
+            "above the bed in the second bedroom with the television",
+            "above the bed in the second bedroom"
+        ],
+        "position": [
+            -8.009016036987305,
+            0.05035419762134552,
+            8.276389122009277
+        ],
+        "rotation": [
+            -0.9870320558547974,
+            0.0,
+            0.16052371263504028,
+            0.0
+        ],
+        "object_id": null,
+        "class": null
+    },
+    {
+        "question": "what is kept on the tray in the kitchen counter?",
+        "answer": "banana",
+        "category": "object recognition",
+        "question_id": "f2063c53-72d8-4cd8-b2cb-78ceee86449d",
+        "episode_history": "00880-Nfvxx8J5NCo",
+        "position": [
+            -9.55214786529541,
+            0.18085697293281555,
+            -0.3554811477661133
+        ],
+        "rotation": [
+            0.10294225811958313,
+            0.0,
+            0.9946873188018799,
+            0.0
+        ],
+        "object_id": null,
+        "class": null
+    },
+    {
+        "question": "what color are the numbers written on the wall clock?",
+        "answer": "white",
+        "category": "attribute recognition",
+        "question_id": "c1b2ccf5-b56d-4ced-9cec-eaf62fedc675",
+        "episode_history": "00880-Nfvxx8J5NCo",
+        "position": [
+            -9.55214786529541,
+            0.18085697293281555,
+            -0.3554811477661133
+        ],
+        "rotation": [
+            0.10294225811958313,
+            0.0,
+            0.9946873188018799,
+            0.0
+        ],
+        "object_id": null,
+        "class": null
+    },
+    {
+        "question": "what color are the chairs?",
+        "answer": "brown",
+        "category": "attribute recognition",
+        "question_id": "de038605-c441-4a30-968b-7815bad3a3c9",
+        "episode_history": "00880-Nfvxx8J5NCo",
+        "position": [
+            -9.55214786529541,
+            0.18085697293281555,
+            -0.3554811477661133
+        ],
+        "rotation": [
+            0.10294225811958313,
+            0.0,
+            0.9946873188018799,
+            0.0
+        ],
+        "object_id": null,
+        "class": null
+    },
+    {
+        "question": "what is between the fruit bowl and knife set?",
+        "answer": "a container of spices",
+        "category": "spatial understanding",
+        "question_id": "a5c5bb29-700a-4ef5-b17d-aaa47bb0ef3f",
+        "episode_history": "00880-Nfvxx8J5NCo",
+        "position": [
+            -9.55214786529541,
+            0.18085697293281555,
+            -0.3554811477661133
+        ],
+        "rotation": [
+            0.10294225811958313,
+            0.0,
+            0.9946873188018799,
+            0.0
+        ],
+        "object_id": null,
+        "class": null
+    },
+    {
+        "question": "is the table in the living room completely clean?",
+        "answer": "no",
+        "category": "spatial understanding",
+        "question_id": "b05e7b30-6a4d-4381-9d05-a42ed0c90e30",
+        "episode_history": "00880-Nfvxx8J5NCo",
+        "position": [
+            -9.55214786529541,
+            0.18085697293281555,
+            -0.3554811477661133
+        ],
+        "rotation": [
+            0.10294225811958313,
+            0.0,
+            0.9946873188018799,
+            0.0
+        ],
+        "object_id": null,
+        "class": null
+    },
+    {
+        "question": "is the television on or off?",
+        "answer": "off",
+        "category": "object state recognition",
+        "question_id": "bd5e9e4e-c6be-40e9-a923-fcc6aa321947",
+        "episode_history": "00880-Nfvxx8J5NCo",
+        "position": [
+            -9.55214786529541,
+            0.18085697293281555,
+            -0.3554811477661133
+        ],
+        "rotation": [
+            0.10294225811958313,
+            0.0,
+            0.9946873188018799,
+            0.0
+        ],
+        "object_id": null,
+        "class": null
+    },
+    {
+        "question": "is the fan on or off?",
+        "answer": "off",
+        "category": "object state recognition",
+        "question_id": "d8183087-f3dd-47c1-b985-733923edc4a0",
+        "episode_history": "00880-Nfvxx8J5NCo",
+        "position": [
+            -9.55214786529541,
+            0.18085697293281555,
+            -0.3554811477661133
+        ],
+        "rotation": [
+            0.10294225811958313,
+            0.0,
+            0.9946873188018799,
+            0.0
+        ],
+        "object_id": null,
+        "class": null
+    },
+    {
+        "question": "where can I keep a photo frame?",
+        "answer": "on the counter below the television with other frames",
+        "category": "functional reasoning",
+        "question_id": "109eaad4-6e68-4da1-8f98-a0d8589ec26d",
+        "episode_history": "00880-Nfvxx8J5NCo",
+        "position": [
+            -9.55214786529541,
+            0.18085697293281555,
+            -0.3554811477661133
+        ],
+        "rotation": [
+            0.10294225811958313,
+            0.0,
+            0.9946873188018799,
+            0.0
+        ],
+        "object_id": null,
+        "class": null
+    },
+    {
+        "question": "where can I keep a couple of apples?",
+        "answer": "on the fruit basket in the kitchen counter.",
+        "category": "functional reasoning",
+        "question_id": "67cd7145-4b1f-4b2a-a698-8e4738cb7c41",
+        "episode_history": "00880-Nfvxx8J5NCo",
+        "position": [
+            -9.55214786529541,
+            0.18085697293281555,
+            -0.3554811477661133
+        ],
+        "rotation": [
+            0.10294225811958313,
+            0.0,
+            0.9946873188018799,
+            0.0
+        ],
+        "object_id": null,
+        "class": null
+    },
+    {
+        "question": "how can I clean my hands?",
+        "answer": "there is a sink in the kitchen",
+        "category": "world knowledge",
+        "question_id": "d4c10718-fd57-4db0-93c1-b54deb4b1b25",
+        "episode_history": "00880-Nfvxx8J5NCo",
+        "position": [
+            -9.55214786529541,
+            0.18085697293281555,
+            -0.3554811477661133
+        ],
+        "rotation": [
+            0.10294225811958313,
+            0.0,
+            0.9946873188018799,
+            0.0
+        ],
+        "object_id": null,
+        "class": null
+    },
+    {
+        "question": "where can I keep a new knife I got?",
+        "answer": "there is a knife holder in the kitchen counter next to the gas stove.",
+        "category": "world knowledge",
+        "question_id": "1dcdd225-eba2-4ba1-97b6-c4cdc7ca4e9b",
+        "episode_history": "00880-Nfvxx8J5NCo",
+        "position": [
+            -9.55214786529541,
+            0.18085697293281555,
+            -0.3554811477661133
+        ],
+        "rotation": [
+            0.10294225811958313,
+            0.0,
+            0.9946873188018799,
+            0.0
+        ],
+        "object_id": null,
+        "class": null
+    },
+    {
+        "question": "where is the paper roll?",
+        "answer": "In the kitchen counter right next to the gas stove",
+        "category": "object localization",
+        "question_id": "b93ea8d4-4b9a-46a3-b9b4-3d79c5ce074e",
+        "episode_history": "00880-Nfvxx8J5NCo",
+        "extra_answers": [
+            "next to the stove",
+            "to the right of the stove",
+            "to the right of the stove",
+            "on the counter across the sink"
+        ],
+        "position": [
+            -9.55214786529541,
+            0.18085697293281555,
+            -0.3554811477661133
+        ],
+        "rotation": [
+            0.10294225811958313,
+            0.0,
+            0.9946873188018799,
+            0.0
+        ],
+        "object_id": null,
+        "class": null
+    },
+    {
+        "question": "where is the clock?",
+        "answer": "in the living room hallway next to the television",
+        "category": "object localization",
+        "question_id": "90ab6389-d85e-42ad-b44a-af4849da2631",
+        "episode_history": "00880-Nfvxx8J5NCo",
+        "extra_answers": [
+            "on the wall across from the kitchen",
+            "on the wall across from the fridge",
+            "hallway before the living room",
+            "the wall cross the kitchen"
+        ],
+        "position": [
+            -9.55214786529541,
+            0.18085697293281555,
+            -0.3554811477661133
+        ],
+        "rotation": [
+            0.10294225811958313,
+            0.0,
+            0.9946873188018799,
+            0.0
+        ],
+        "object_id": null,
+        "class": null
+    },
+    {
+        "question": "what is on the chair?",
+        "answer": "a soft pillow",
+        "category": "object recognition",
+        "question_id": "734c3095-4a19-4659-9cd9-9d07cef6a909",
+        "episode_history": "00827-BAbdmeyTvMZ",
+        "position": [
+            8.8579740524292,
+            0.19520819187164307,
+            2.8207812309265137
+        ],
+        "rotation": [
+            -0.4048997163772583,
+            0.0,
+            0.9143611192703247,
+            0.0
+        ],
+        "object_id": null,
+        "class": null
+    },
+    {
+        "question": "what is right next to the chair?",
+        "answer": "a small side table",
+        "category": "object recognition",
+        "question_id": "2ed999e1-9553-4263-9645-995b6f6a96fc",
+        "episode_history": "00827-BAbdmeyTvMZ",
+        "position": [
+            8.8579740524292,
+            0.19520819187164307,
+            2.8207812309265137
+        ],
+        "rotation": [
+            -0.4048997163772583,
+            0.0,
+            0.9143611192703247,
+            0.0
+        ],
+        "object_id": null,
+        "class": null
+    },
+    {
+        "question": "is the outside door open or closed?",
+        "answer": "open",
+        "category": "attribute recognition",
+        "question_id": "5bcf7dfd-d346-4936-850b-dc1ef49b93cf",
+        "episode_history": "00827-BAbdmeyTvMZ",
+        "position": [
+            8.8579740524292,
+            0.19520819187164307,
+            2.8207812309265137
+        ],
+        "rotation": [
+            -0.4048997163772583,
+            0.0,
+            0.9143611192703247,
+            0.0
+        ],
+        "object_id": null,
+        "class": null
+    },
+    {
+        "question": "is the table in the living room clean?",
+        "answer": "yes",
+        "category": "spatial understanding",
+        "question_id": "3af8c1fb-bcde-4a18-83d1-c811785a3d48",
+        "episode_history": "00827-BAbdmeyTvMZ",
+        "position": [
+            8.8579740524292,
+            0.19520819187164307,
+            2.8207812309265137
+        ],
+        "rotation": [
+            -0.4048997163772583,
+            0.0,
+            0.9143611192703247,
+            0.0
+        ],
+        "object_id": null,
+        "class": null
+    },
+    {
+        "question": "is the outside door open or closed?",
+        "answer": "open",
+        "category": "object state recognition",
+        "question_id": "a14d66fc-180b-49df-a84a-d0fc12ab8ff7",
+        "episode_history": "00827-BAbdmeyTvMZ",
+        "position": [
+            8.8579740524292,
+            0.19520819187164307,
+            2.8207812309265137
+        ],
+        "rotation": [
+            -0.4048997163772583,
+            0.0,
+            0.9143611192703247,
+            0.0
+        ],
+        "object_id": null,
+        "class": null
+    },
+    {
+        "question": "where can I sit in the living room?",
+        "answer": "on the sofa",
+        "category": "world knowledge",
+        "question_id": "d09b5f50-ade2-477f-93bb-9f2f27f4fa71",
+        "episode_history": "00827-BAbdmeyTvMZ",
+        "position": [
+            8.8579740524292,
+            0.19520819187164307,
+            2.8207812309265137
+        ],
+        "rotation": [
+            -0.4048997163772583,
+            0.0,
+            0.9143611192703247,
+            0.0
+        ],
+        "object_id": null,
+        "class": null
+    },
+    {
+        "question": "what is special about the wall in the living room?",
+        "answer": "it seems to be made of stone",
+        "category": "world knowledge",
+        "question_id": "11da38f3-c32f-4443-bd33-6a2c1ec22a64",
+        "episode_history": "00827-BAbdmeyTvMZ",
+        "position": [
+            8.8579740524292,
+            0.19520819187164307,
+            2.8207812309265137
+        ],
+        "rotation": [
+            -0.4048997163772583,
+            0.0,
+            0.9143611192703247,
+            0.0
+        ],
+        "object_id": null,
+        "class": null
+    },
+    {
+        "question": "where is the standing lamp?",
+        "answer": "next to the bed in the bedroom",
+        "category": "object localization",
+        "question_id": "cdb2760c-33d0-4e19-8ddc-494f9874dfb3",
+        "episode_history": "00827-BAbdmeyTvMZ",
+        "extra_answers": [
+            "in the bedroom",
+            "to the left of the bed",
+            "the bedroom",
+            "The room with the bed and the bathroom"
+        ],
+        "position": [
+            8.8579740524292,
+            0.19520819187164307,
+            2.8207812309265137
+        ],
+        "rotation": [
+            -0.4048997163772583,
+            0.0,
+            0.9143611192703247,
+            0.0
+        ],
+        "object_id": null,
+        "class": null
+    },
+    {
+        "question": "What is the black object next to the black chair?",
+        "answer": "A filing cabinet",
+        "category": "object recognition",
+        "question_id": "c3054a94-e904-4bb5-b7b7-47b14d052d85",
+        "episode_history": "00861-GLAQ4DNUx5U",
+        "position": [
+            0.7373262047767639,
+            1.207113265991211,
+            0.9808619022369385
+        ],
+        "rotation": [
+            0.9252249002456665,
+            0.0,
+            0.3794192373752594,
+            0.0
+        ],
+        "object_id": null,
+        "class": null
+    },
+    {
+        "question": "What shape is the multicolored chair in the living room?",
+        "answer": "Circular",
+        "category": "attribute recognition",
+        "question_id": "93e19ff9-bfbd-4623-84a3-82c66528477e",
+        "episode_history": "00861-GLAQ4DNUx5U",
+        "position": [
+            0.7373262047767639,
+            1.207113265991211,
+            0.9808619022369385
+        ],
+        "rotation": [
+            0.9252249002456665,
+            0.0,
+            0.3794192373752594,
+            0.0
+        ],
+        "object_id": null,
+        "class": null
+    },
+    {
+        "question": "What shape is the couch in the living room?",
+        "answer": "It is a c shape.",
+        "category": "attribute recognition",
+        "question_id": "91a12c51-1ca0-4651-902a-c5aaeb62534f",
+        "episode_history": "00861-GLAQ4DNUx5U",
+        "position": [
+            0.7373262047767639,
+            1.207113265991211,
+            0.9808619022369385
+        ],
+        "rotation": [
+            0.9252249002456665,
+            0.0,
+            0.3794192373752594,
+            0.0
+        ],
+        "object_id": null,
+        "class": null
+    },
+    {
+        "question": "Could I have a conversation with someone cooking dinner in the kitchen while I sit in the dining room?",
+        "answer": "Yes",
+        "category": "spatial understanding",
+        "question_id": "35c42d77-9cdd-4072-b423-768350e0dbf2",
+        "episode_history": "00861-GLAQ4DNUx5U",
+        "position": [
+            0.7373262047767639,
+            1.207113265991211,
+            0.9808619022369385
+        ],
+        "rotation": [
+            0.9252249002456665,
+            0.0,
+            0.3794192373752594,
+            0.0
+        ],
+        "object_id": null,
+        "class": null
+    },
+    {
+        "question": "What is on top of the washing machine?",
+        "answer": "The dryer",
+        "category": "spatial understanding",
+        "question_id": "b70465b8-53a3-436f-b12f-2d8cdf8f1856",
+        "episode_history": "00861-GLAQ4DNUx5U",
+        "position": [
+            0.7373262047767639,
+            1.207113265991211,
+            0.9808619022369385
+        ],
+        "rotation": [
+            0.9252249002456665,
+            0.0,
+            0.3794192373752594,
+            0.0
+        ],
+        "object_id": null,
+        "class": null
+    },
+    {
+        "question": "Is my study desk free from clutter?",
+        "answer": "No",
+        "category": "object state recognition",
+        "question_id": "d2f68af9-ef54-48cd-8dc2-f2cfff48489b",
+        "episode_history": "00861-GLAQ4DNUx5U",
+        "position": [
+            0.7373262047767639,
+            1.207113265991211,
+            0.9808619022369385
+        ],
+        "rotation": [
+            0.9252249002456665,
+            0.0,
+            0.3794192373752594,
+            0.0
+        ],
+        "object_id": null,
+        "class": null
+    },
+    {
+        "question": "Is the printer plugged in?",
+        "answer": "No",
+        "category": "object state recognition",
+        "question_id": "025258b4-51f0-4c83-b789-c4c186964c4d",
+        "episode_history": "00861-GLAQ4DNUx5U",
+        "position": [
+            0.7373262047767639,
+            1.207113265991211,
+            0.9808619022369385
+        ],
+        "rotation": [
+            0.9252249002456665,
+            0.0,
+            0.3794192373752594,
+            0.0
+        ],
+        "object_id": null,
+        "class": null
+    },
+    {
+        "question": "How can I dry my towel?",
+        "answer": "By hanging it on the towel warmer.",
+        "category": "functional reasoning",
+        "question_id": "206ca121-9185-484d-ab22-acfb082b1359",
+        "episode_history": "00861-GLAQ4DNUx5U",
+        "position": [
+            0.7373262047767639,
+            1.207113265991211,
+            0.9808619022369385
+        ],
+        "rotation": [
+            0.9252249002456665,
+            0.0,
+            0.3794192373752594,
+            0.0
+        ],
+        "object_id": null,
+        "class": null
+    },
+    {
+        "question": "How can I reach the wine glasses if I'm too short?",
+        "answer": "Using the step-stool in the laundry room.",
+        "category": "functional reasoning",
+        "question_id": "c64f520c-6450-413c-99da-979be386ff86",
+        "episode_history": "00861-GLAQ4DNUx5U",
+        "position": [
+            0.7373262047767639,
+            1.207113265991211,
+            0.9808619022369385
+        ],
+        "rotation": [
+            0.9252249002456665,
+            0.0,
+            0.3794192373752594,
+            0.0
+        ],
+        "object_id": null,
+        "class": null
+    },
+    {
+        "question": "Where did I leave my water bottle?",
+        "answer": "On the table next to the desk in the study.",
+        "category": "object localization",
+        "question_id": "6b804083-8b56-4d13-8309-c5cb642b0f87",
+        "episode_history": "00861-GLAQ4DNUx5U",
+        "extra_answers": [
+            "on the table close the study room",
+            "on the table in the study room with the chair",
+            "On the table next to the staircase",
+            "On the table next to the printer"
+        ],
+        "position": [
+            0.7373262047767639,
+            1.207113265991211,
+            0.9808619022369385
+        ],
+        "rotation": [
+            0.9252249002456665,
+            0.0,
+            0.3794192373752594,
+            0.0
+        ],
+        "object_id": null,
+        "class": null
+    },
+    {
+        "question": "What room is the potted cactus in?",
+        "answer": "The bathroom",
+        "category": "object localization",
+        "question_id": "33639e66-332d-4824-82ef-e1bf13e94ccb",
+        "episode_history": "00861-GLAQ4DNUx5U",
+        "extra_answers": [
+            "restroom",
+            "bathroom",
+            "In the bathroom",
+            "On the counter to the right of the sink in the bathroom"
+        ],
+        "position": [
+            0.7373262047767639,
+            1.207113265991211,
+            0.9808619022369385
+        ],
+        "rotation": [
+            0.9252249002456665,
+            0.0,
+            0.3794192373752594,
+            0.0
+        ],
+        "object_id": null,
+        "class": null
+    },
+    {
+        "question": "What can be seen through the window in the living room?",
+        "answer": "Trees and hills",
+        "category": "object recognition",
+        "question_id": "911693d9-2d28-4ff2-83a9-c67b83753831",
+        "episode_history": "00835-q3zU7Yy5E5s",
+        "position": [
+            -0.4913436472415924,
+            0.03521956503391266,
+            -0.4102398455142975
+        ],
+        "rotation": [
+            0.661293089389801,
+            0.0,
+            0.7501276135444641,
+            0.0
+        ],
+        "object_id": null,
+        "class": null
+    },
+    {
+        "question": "Where is the fireplace?",
+        "answer": "In the living room, to the right of the radiator and window",
+        "category": "object localization",
+        "question_id": "9b2d06e5-ca78-4519-a9ca-75c06209b770",
+        "episode_history": "00835-q3zU7Yy5E5s",
+        "extra_answers": [
+            "In the corner of the living room.",
+            "Next to the blue couch.",
+            "in the living room ",
+            "in the living room right next to the window"
+        ],
+        "position": [
+            -0.4913436472415924,
+            0.03521956503391266,
+            -0.4102398455142975
+        ],
+        "rotation": [
+            0.661293089389801,
+            0.0,
+            0.7501276135444641,
+            0.0
+        ],
+        "object_id": null,
+        "class": null
+    }
+]
