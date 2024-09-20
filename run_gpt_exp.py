@@ -59,7 +59,13 @@ def take_round_observation(agent,simulator,camera_tilt,pts,angle,num_obs,save_di
         plt.imsave(
             os.path.join(save_dir, f"round_{view_idx}.png"), rgb
         )
-    
+
+def resize_image(image, target_h, target_w):
+    # image: np.array, h, w, c
+    #image = Image.fromarray(image)
+    image = image.resize((target_w, target_h))
+    #return np.array(image)
+    return image
 
 def main(cfg):
     camera_tilt = cfg.camera_tilt_deg * np.pi / 180
@@ -228,7 +234,7 @@ def main(cfg):
                 #prompt_rel = f"\nConsider the question: '{question}'. Are you confident about answering the question with the current view? Answer with Yes or No."
                 # logging.info(f"Prompt Rel: {prompt_rel}")
                 #smx_vlm_rel = vlm.get_loss(rgb_im, prompt_rel, ["Yes", "No"])
-                smx_vlm_rel = get_confidence(question, rgb_im)
+                smx_vlm_rel = get_confidence(question, resize_image(rgb_im,cfg.prompt_h,cfg.prompt_w))
                 logging.info(f"Rel - Prob: {smx_vlm_rel}")
 
                 # Get frontier candidates
@@ -289,7 +295,8 @@ def main(cfg):
 
                     # get VLM reasoning for exploring
                     if cfg.use_lsv:
-                        lsv = get_directions(question, rgb_im_draw, draw_letters[:actual_num_prompt_points])
+                        lsv = get_directions(question, resize_image(rgb_im_draw,cfg.prompt_h,cfg.prompt_w), 
+                            draw_letters[:actual_num_prompt_points])
                         lsv *= actual_num_prompt_points / 3
                     else:
                         lsv = (
@@ -301,7 +308,7 @@ def main(cfg):
                         #prompt_gsv = f"\nConsider the question: '{question}', and you will explore the environment for answering it. Is there any direction shown in the image worth exploring? Answer with Yes or No."
                         # logging.info(f"Prompt Exp base: {prompt_gsv}")
                         #gsv = vlm.get_loss(rgb_im, prompt_gsv, ["Yes", "No"])[0]
-                        gsv = get_global_value(question, rgb_im)[0]
+                        gsv = get_global_value(question, resize_image(rgb_im,cfg.prompt_h,cfg.prompt_w))[0]
                         gsv = (
                             np.exp(gsv / cfg.gsv_T) / cfg.gsv_F
                         )  # scale before combined with lsv
