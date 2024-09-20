@@ -79,6 +79,16 @@ def parse_probs(response):
         for log_probs in top_logprobs
     }
     return prob_dict
+
+def logprobs2score(candidates,log_probs):
+    scores = np.zeros(len(candidates))
+    for i, c in enumerate(candidates):
+        if c in log_probs:
+            scores[i] = log_probs[c]
+        else:
+            scores[i] = -1e4
+    scores = np.exp(scores) / np.sum(np.exp(scores))
+    return scores
         
 # encode tensor images to base64 format
 def encode_tensor2base64(img):
@@ -96,7 +106,8 @@ def format_confidence_question(question, img):
     text = "Here is the current view of the scene."
     img = encode_tensor2base64(img)
     content.append((text, img))
-    text = f"\nConsider the question: '{question}'. Are you confident about answering the question with the current view? Answer with Yes/No \n"
+    text = f"\nConsider the question: '{question}'. Are you confident about answering the question with the current view?\n"
+    text += "Answer with \"Yes\" or \"No\"\n"
     content.append((text,))
     #text = "you should return a score between 0 and 10.\n"
     #text += "you can show the reason for your confidence score but put it in a new line after the choice.\n"
@@ -105,24 +116,25 @@ def format_confidence_question(question, img):
 def get_confidence(question, img):
     sys_prompt, content = format_confidence_question(question, img)
     retry_limit = 3
+    candidates = ["Yes", "No"]
     while retry_limit > 0:
-        response = call_openai_api(sys_prompt, content, ["Yes", "No"])
+        response = call_openai_api(sys_prompt, content, candidates)
         if response is None:
             logging.info("Invalid response, retrying")
             retry_limit -= 1
             continue
         # parse the response
         log_probs = parse_probs(response)
-        if "Yes" not in log_probs and "No" not in log_probs:
-            logging.info("Invalid response, retrying")
-            retry_limit -= 1
-            continue
-        probs = np.array([log_probs["Yes"], log_probs["No"]])
-        probs = np.exp(probs) / np.sum(np.exp(probs))
-        return probs
+        if set(candidates).issubset(set(log_probs.keys())): 
+            scores = logprobs2score(candidates,log_probs)
+            logging.info(f"VLM output: {log_probs}")
+            logging.info(f"VLM candidates: {candidates} scores: {scores}")
+            return scores
+        retry_limit -= 1
     
-    # no valid reponse, not sure about the question
-    return 0
+    # some candidates are not included
+    return logprobs2score(candidates,log_probs)
+    
 
 def format_choose_direction(question, img, candidates):
     sys_prompt = "Task: You are an agent in an indoor scene tasked with answering questions by observing the surroundings and exploring the environment."
@@ -159,22 +171,17 @@ def get_directions(question, img, candidates):
         # parse the response
         log_probs = parse_probs(response)
         if set(candidates).issubset(set(log_probs.keys())):
-            scores = np.zeros(len(candidates))
-            for i, c in enumerate(candidates):
-                if c in log_probs:
-                    scores[i] = log_probs[c]
-                else:
-                    scores[i] = -1e4
-            scores = np.exp(scores) / np.sum(np.exp(scores))
+            scores = logprobs2score(candidates,log_probs)
             logging.info(f"VLM output: {log_probs}")
-            logging.info(f"VLM scores: {scores}")
+            logging.info(f"VLM candidates: {candidates} scores: {scores}")
+            return scores
         else:
             logging.info("Not all choices considered, retrying")
             retry_limit -= 1
             continue
-        return scores
     
-    return np.ones(len(candidates)) / len(candidates)
+    # some candidates are not included
+    return logprobs2score(candidates,log_probs)
 
 def format_global_selection(question, img):
     sys_prompt = "Task: You are an agent in an indoor scene tasked with answering questions by observing the surroundings and exploring the environment."
@@ -192,8 +199,9 @@ def format_global_selection(question, img):
 def get_global_value(question, img):
     sys_prompt, content = format_global_selection(question, img)
     retry_limit = 3
+    candidates = ["Yes","No"]
     while retry_limit > 0:
-        response = call_openai_api(sys_prompt, content, ["Yes", "No"])
+        response = call_openai_api(sys_prompt, content, candidates)
         if response is None:
             logging.info("Invalid response, retrying")
             retry_limit -= 1
@@ -201,15 +209,14 @@ def get_global_value(question, img):
         # parse the response
         #log_probs = response['choices'][0]['logprobs']['top_logprobs'][0]
         log_probs = parse_probs(response)
-        if "Yes" not in log_probs and "No" not in log_probs:
-            logging.info("Invalid response, retrying")
-            retry_limit -= 1
-            continue
-        probs = np.array([log_probs["Yes"], log_probs["No"]])
-        probs = np.exp(probs) / np.sum(np.exp(probs))
-        return probs
-    
-    return 0
+        if set(candidates).issubset(set(log_probs.keys())): 
+            scores = logprobs2score(candidates,log_probs)
+            logging.info(f"VLM output: {log_probs}")
+            logging.info(f"VLM candidates: {candidates} scores: {scores}")
+            return scores
+        retry_limit -= 1
+        
+    return logprobs2score(candidates,log_probs)
     
             
     

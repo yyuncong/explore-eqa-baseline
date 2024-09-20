@@ -5,3 +5,4 @@ cfg/raw_test.yaml
 output/
 data/frames
 __pycache__/
+eval_baseline.sh
