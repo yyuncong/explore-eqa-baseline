@@ -4,7 +4,7 @@
 #SBATCH -e output/run_eval_new_gpt_%j.err
 #SBATCH --mem=12G
 #SBATCH --nodes=1
-#SBATCH --time=12:00:00
+#SBATCH --time=24:00:00
 #SBATCH -p gpu
 #SBATCH -G 1
 #SBATCH --constraint="2080ti"
