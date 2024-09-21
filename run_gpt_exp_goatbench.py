@@ -252,7 +252,6 @@ def main(cfg, start_ratio=0.0, end_ratio=1.0):
                 os.makedirs(subtask_object_observe_dir, exist_ok=False)
 
                 # Prepare metadata for the subtask
-                goal_type = 'image'
                 # format question according to the goal type
                 if goal_type == "object":
                     question = f"Where is the {goal_category}?"
