@@ -1,11 +1,12 @@
 # General
-seed: 42
-exp_name: vlm_baseline_eval_gpt
-output_parent_dir: /project/pi_chuangg_umass_edu/yuncong/results/
+seed: 77
+exp_name: vlm_baseline_eval_gpt_new_184
+output_parent_dir: /work/pi_chuangg_umass_edu/yuncong/results
 scene_dataset_config_path: "data/hm3d_annotated_basis.scene_dataset_config.json"
 scene_data_path_train: /project/pi_chuangg_umass_edu/yuncong/data_v2/scene_datasets/hm3d/train
 scene_data_path_val: /work/pi_chuangg_umass_edu/yuncong/data/scene_datasets/hm3d/val
-question_data_path: data/generated_questions-hm3d-single-floor.json #exploration_data
+#question_data_path: data/generated_questions-eval.json #exploration_data
+question_data_path: data/generated_questions-184.json
 
 save_obs: true
 save_freq: 10
@@ -17,14 +18,14 @@ early_stop: true
 # whether use the most relevant step when active exploration failed
 use_best: false
 
-confidence_threshold: 0.4
+confidence_threshold: 0.3
 # Question answering
 
 # Camera, image
 camera_height: 1.5
 camera_tilt_deg: -30
-img_width: 720
-img_height: 720
+img_width: 1280 #720
+img_height: 1280 #720
 hfov: 120
 tsdf_grid_size: 0.1
 margin_w_ratio: 0.25
@@ -32,9 +33,13 @@ margin_h_ratio: 0.6
 
 # Navigation
 init_clearance: 0.5
-max_step_room_size_ratio: 11 #3
+max_step_room_size_ratio: 1.5 #11
 black_pixel_ratio: 0.2 #0.5
 min_random_init_steps: 2
+
+# for prompting gpt-4o
+prompt_h: 360
+prompt_w: 360
 
 # Semantic map
 use_active: true
@@ -52,7 +57,7 @@ planner:
   smooth_sigma: 5
   eps: 1
   min_dist_from_cur: 0.5
-  max_dist_from_cur: 3
+  max_dist_from_cur: 1
   frontier_spacing: 1.5
   frontier_min_neighbors: 3
   frontier_max_neighbors: 4

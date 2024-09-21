@@ -59,11 +59,11 @@ def load_scene(cfg,scene_id):
     # scene_features_path = cfg.scene_features_path_train if int(scene_id.split("-")[0]) < 800 else cfg.scene_features_path_val
     scene_mesh_path = os.path.join(scene_path, scene_id, scene_id.split("-")[1] + ".basis.glb")
     navmesh_path = os.path.join(scene_path, scene_id, scene_id.split("-")[1] + ".basis.navmesh")
-    semantic_texture_path = os.path.join(scene_path, scene_id, scene_id.split("-")[1] + ".semantic.glb")
-    scene_semantic_annotation_path = os.path.join(scene_path, scene_id, scene_id.split("-")[1] + ".semantic.txt")
+    #semantic_texture_path = os.path.join(scene_path, scene_id, scene_id.split("-")[1] + ".semantic.glb")
+    #scene_semantic_annotation_path = os.path.join(scene_path, scene_id, scene_id.split("-")[1] + ".semantic.txt")
     # bbox_data_path = os.path.join(cfg.semantic_bbox_data_path, scene_id + ".json")
     
-    if not os.path.exists(scene_mesh_path) or not os.path.exists(navmesh_path) or not os.path.exists(semantic_texture_path) or not os.path.exists(scene_semantic_annotation_path):
+    if not os.path.exists(scene_mesh_path) or not os.path.exists(navmesh_path):
         logging.info(f"Scene {scene_id} not found, skip")
         return None
     # if not os.path.exists(bbox_data_path):
@@ -78,8 +78,8 @@ def load_scene(cfg,scene_id):
         # scene_features_path = scene_features_path,
         scene_mesh_path = scene_mesh_path,
         navmesh_path = navmesh_path,
-        semantic_texture_path = semantic_texture_path,
-        scene_semantic_annotation_path = scene_semantic_annotation_path,
+        #semantic_texture_path = semantic_texture_path,
+        #scene_semantic_annotation_path = scene_semantic_annotation_path,
         # bbox_data_path = bbox_data_path
     )
     
