@@ -1,0 +1,76 @@
+# General
+seed: 42
+exp_name: vlm_baseline_eval_gpt_goatbench
+output_parent_dir: /project/pi_chuangg_umass_edu/yuncong/results/
+scene_dataset_config_path: "data/hm3d_annotated_basis.scene_dataset_config.json"
+scene_data_path_train: /project/pi_chuangg_umass_edu/yuncong/data_v2/scene_datasets/hm3d
+scene_data_path_val: /work/pi_chuangg_umass_edu/yuncong/data/scene_datasets/hm3d
+test_data_dir: /home/yuncongyang_umass_edu/scene_understanding/jiachen/explore-eqa-test/goat_bench/val_unseen/content/
+
+save_obs: true
+save_freq: 10
+
+# configuration for storage
+object_obs: 10
+num_last_views: 5
+early_stop: true
+# whether use the most relevant step when active exploration failed
+use_best: false
+
+save_visualization: false
+
+confidence_threshold: 0.4
+# Question answering
+
+# Camera, image
+camera_height: 1.5
+camera_tilt_deg: -30
+img_width: 360
+img_height: 360
+hfov: 120
+tsdf_grid_size: 0.1
+margin_w_ratio: 0.25
+margin_h_ratio: 0.6
+
+# about goatbench evaluation
+success_distance: 1.0
+
+# Navigation
+init_clearance: 0.5
+max_step_room_size_ratio: 2
+black_pixel_ratio: 0.2 #0.5
+min_random_init_steps: 2
+
+# Semantic map
+use_active: true
+use_lsv: true
+use_gsv: true
+gsv_T: 0.5
+gsv_F: 3
+planner:
+  dist_T: 9999 #10
+  unexplored_T: 2.0 #0.2
+  unoccupied_T: 2.0
+  val_T: 0.5
+  val_dir_T: 0.5
+  max_val_check_frontier: 3
+  smooth_sigma: 5
+  eps: 1
+  min_dist_from_cur: 0.5
+  max_dist_from_cur: 3
+  frontier_spacing: 1.5
+  frontier_min_neighbors: 3
+  frontier_max_neighbors: 4
+  max_unexplored_check_frontier: 3
+  max_unoccupied_check_frontier: 1
+
+visual_prompt:
+  cluster_threshold: 1.0
+  num_prompt_points: 3
+  num_max_unoccupied: 300
+  min_points_for_clustering: 3
+  point_min_dist: 2
+  point_max_dist: 10
+  cam_offset: 0.6
+  min_num_prompt_points: 2
+  circle_radius: 18
