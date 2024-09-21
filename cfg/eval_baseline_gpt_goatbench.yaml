@@ -1,6 +1,6 @@
 # General
 seed: 42
-exp_name: vlm_baseline_eval_gpt
+exp_name: vlm_baseline_eval_gpt_goatbench
 output_parent_dir: /project/pi_chuangg_umass_edu/yuncong/results/
 scene_dataset_config_path: "data/hm3d_annotated_basis.scene_dataset_config.json"
 scene_data_path_train: /project/pi_chuangg_umass_edu/yuncong/data_v2/scene_datasets/hm3d
