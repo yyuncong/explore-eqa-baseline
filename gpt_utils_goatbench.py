@@ -11,7 +11,7 @@ import numpy as np
 import tiktoken
 
 client = AzureOpenAI(
-    azure_endpoint="https://yuncong.openai.azure.com/",
+    azure_endpoint="https://jiaben.openai.azure.com/",
     api_key=os.getenv('AZURE_OPENAI_KEY'),
     api_version="2024-02-15-preview",
 )
@@ -89,21 +89,37 @@ def encode_tensor2base64(img):
     img_base64 = base64.b64encode(buffer.read()).decode("utf-8")
     return img_base64
 
-def format_confidence_question(question, img):
+def format_confidence_question(question, ref_image, obs_image):
     sys_prompt = "Task: You are an agent in an indoor scene tasked with answering questions by observing the surroundings and exploring the environment."
     content = []
     
     text = "Here is the current view of the scene."
-    img = encode_tensor2base64(img)
-    content.append((text, img))
-    text = f"\nConsider the question: '{question}'. Are you confident about answering the question with the current view? Answer with Yes/No \n"
+    obs_image = encode_tensor2base64(obs_image)
+    content.append((text, obs_image))
+    if ref_image is None:
+        text = f"\nConsider the question: '{question}'."
+        content.append((text,))
+    else:
+        text = f"\nConsider the question: '{question}'."
+        ref_image = encode_tensor2base64(ref_image)
+        content.append((text, ref_image))
+    text = "\nAre you confident about answering the question with the current view? Answer with Yes/No \n"
     content.append((text,))
     #text = "you should return a score between 0 and 10.\n"
     #text += "you can show the reason for your confidence score but put it in a new line after the choice.\n"
     return sys_prompt, content
 
-def get_confidence(question, img):
-    sys_prompt, content = format_confidence_question(question, img)
+def get_confidence(question, ref_image, obs_image):
+    sys_prompt, content = format_confidence_question(question, ref_image, obs_image)
+
+    logging.info(f"\n##########\nGet confidence prompt:")
+    message = ''
+    for c in content:
+        message += c[0]
+        if len(c) == 2:
+            message += f"[{c[1][:10]}...]"
+    logging.info(message)
+
     retry_limit = 3
     while retry_limit > 0:
         response = call_openai_api(sys_prompt, content, ["Yes", "No"])
@@ -117,6 +133,10 @@ def get_confidence(question, img):
             logging.info("Invalid response, retrying")
             retry_limit -= 1
             continue
+        if "Yes" not in log_probs:
+            log_probs["Yes"] = -1e4
+        if "No" not in log_probs:
+            log_probs["No"] = -1e4
         probs = np.array([log_probs["Yes"], log_probs["No"]])
         probs = np.exp(probs) / np.sum(np.exp(probs))
         return probs
@@ -124,14 +144,20 @@ def get_confidence(question, img):
     # no valid reponse, not sure about the question
     return 0
 
-def format_choose_direction(question, img, candidates):
+def format_choose_direction(question, ref_image, obs_image, candidates):
     sys_prompt = "Task: You are an agent in an indoor scene tasked with answering questions by observing the surroundings and exploring the environment."
     content = []
     
     text = "Here is the current view of the scene."
-    img = encode_tensor2base64(img)
-    content.append((text, img))
-    text = f"\nConsider the question: '{question}', and you will explore the environment for answering it.\nWhich direction (black letters on the image) would you explore then?\n"
+    obs_image = encode_tensor2base64(obs_image)
+    content.append((text, obs_image))
+    text = f"\nConsider the question: '{question}'."
+    if ref_image is not None:
+        ref_image = encode_tensor2base64(ref_image)
+        content.append((text, ref_image))
+    else:
+        content.append((text,))
+    text = "\nYou will explore the environment for answering it. So which direction (black letters marked on the current view image) would you explore then?\n"
     text += f"Answer with following directions: {','.join(candidates)}\n"
     text += f"Please return with letter "
     for c in candidates[:-1]:
@@ -147,8 +173,17 @@ def format_choose_direction(question, img, candidates):
     '''
     return sys_prompt, content
 
-def get_directions(question, img, candidates):
-    sys_prompt, content = format_choose_direction(question, img, candidates)
+def get_directions(question, ref_image, obs_image, candidates):
+    sys_prompt, content = format_choose_direction(question, ref_image, obs_image, candidates)
+
+    logging.info(f"\n##########\nGet direction prompt:")
+    message = ''
+    for c in content:
+        message += c[0]
+        if len(c) == 2:
+            message += f"[{c[1][:10]}...]"
+    logging.info(message)
+
     retry_limit = 3
     while retry_limit > 0:
         response = call_openai_api(sys_prompt, content, candidates)
@@ -176,21 +211,37 @@ def get_directions(question, img, candidates):
     
     return np.ones(len(candidates)) / len(candidates)
 
-def format_global_selection(question, img):
+def format_global_selection(question, ref_image, obs_image):
     sys_prompt = "Task: You are an agent in an indoor scene tasked with answering questions by observing the surroundings and exploring the environment."
     content = []
     
     text = "Here is the current view of the scene."
-    img = encode_tensor2base64(img)
-    content.append((text, img))
+    obs_image = encode_tensor2base64(obs_image)
+    content.append((text, obs_image))
     
-    text = f"\nConsider the question: '{question}', and you will explore the environment for answering it. Is there any direction shown in the image worth exploring?\n"
+    text = f"\nConsider the question: '{question}'."
+    if ref_image is not None:
+        ref_image = encode_tensor2base64(ref_image)
+        content.append((text, ref_image))
+    else:
+        content.append((text,))
+
+    text = "\nYou will explore the environment for answering it. Is there any direction shown in the image worth exploring?\n"
     text += "Answer with \"Yes\" or \"No\"\n"
     content.append((text,))
     return sys_prompt, content
 
-def get_global_value(question, img):
-    sys_prompt, content = format_global_selection(question, img)
+def get_global_value(question, ref_image, obs_image):
+    sys_prompt, content = format_global_selection(question, ref_image, obs_image)
+
+    logging.info(f"\n##########\nGet global value prompt:")
+    message = ''
+    for c in content:
+        message += c[0]
+        if len(c) == 2:
+            message += f"[{c[1][:10]}...]"
+    logging.info(message)
+
     retry_limit = 3
     while retry_limit > 0:
         response = call_openai_api(sys_prompt, content, ["Yes", "No"])

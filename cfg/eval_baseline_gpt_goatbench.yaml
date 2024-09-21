@@ -3,9 +3,9 @@ seed: 42
 exp_name: vlm_baseline_eval_gpt
 output_parent_dir: /project/pi_chuangg_umass_edu/yuncong/results/
 scene_dataset_config_path: "data/hm3d_annotated_basis.scene_dataset_config.json"
-scene_data_path_train: /project/pi_chuangg_umass_edu/yuncong/data_v2/scene_datasets/hm3d/train
-scene_data_path_val: /work/pi_chuangg_umass_edu/yuncong/data/scene_datasets/hm3d/val
-question_data_path: data/generated_questions-hm3d-single-floor.json #exploration_data
+scene_data_path_train: /project/pi_chuangg_umass_edu/yuncong/data_v2/scene_datasets/hm3d
+scene_data_path_val: /work/pi_chuangg_umass_edu/yuncong/data/scene_datasets/hm3d
+test_data_dir: /home/yuncongyang_umass_edu/scene_understanding/jiachen/explore-eqa-test/goat_bench/val_unseen/content/
 
 save_obs: true
 save_freq: 10
@@ -23,16 +23,19 @@ confidence_threshold: 0.4
 # Camera, image
 camera_height: 1.5
 camera_tilt_deg: -30
-img_width: 720
-img_height: 720
+img_width: 360
+img_height: 360
 hfov: 120
 tsdf_grid_size: 0.1
 margin_w_ratio: 0.25
 margin_h_ratio: 0.6
 
+# about goatbench evaluation
+success_distance: 1.0
+
 # Navigation
 init_clearance: 0.5
-max_step_room_size_ratio: 11 #3
+max_step_room_size_ratio: 2
 black_pixel_ratio: 0.2 #0.5
 min_random_init_steps: 2
 
