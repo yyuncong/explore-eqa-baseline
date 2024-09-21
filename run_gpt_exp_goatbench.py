@@ -547,6 +547,10 @@ def main(cfg, start_ratio=0.0, end_ratio=1.0):
                     pickle.dump(success_by_task, f)
                 with open(os.path.join(str(cfg.output_dir), f"spl_by_task_{start_ratio}_{end_ratio}.pkl"), "wb") as f:
                     pickle.dump(spl_by_task, f)
+                
+                if not cfg.save_visualization:
+                    # after finishing the subtask, clear up the saved data
+                    os.system(f"rm -r {episode_data_dir}")
 
     logging.info(f"All scene finish")
 

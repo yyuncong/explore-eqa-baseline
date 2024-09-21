@@ -17,6 +17,8 @@ early_stop: true
 # whether use the most relevant step when active exploration failed
 use_best: false
 
+save_visualization: false
+
 confidence_threshold: 0.4
 # Question answering
 
