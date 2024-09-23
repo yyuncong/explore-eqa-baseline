@@ -13,4 +13,7 @@ module load miniconda/22.11.1-1
 module load gcc/13.2.0
 conda activate /work/pi_chuangg_umass_edu/yuncong/conda_envs/eqa-baseline
 
+export HF_HOME=/work/pi_chuangg_umass_edu/yuncong/vlm_cache
+export HF_HUB_CACHE=/work/pi_chuangg_umass_edu/yuncong/vlm_cache
+
 python run_vlm_exp.py -cf cfg/eval_baseline_vlm.yaml

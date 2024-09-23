@@ -38,7 +38,7 @@ from src.geom import get_cam_intr, get_scene_bnds
 from src.vlm import VLM
 from src.tsdf import TSDFPlanner
 from loader import *
-from keys import hf_token
+hf_token = os.environ["HF_TOKEN"]
 from huggingface_hub import login
 import json
 
