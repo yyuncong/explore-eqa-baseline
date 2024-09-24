@@ -16,4 +16,5 @@ conda activate /work/pi_chuangg_umass_edu/yuncong/conda_envs/eqa-baseline
 export HF_HOME=/work/pi_chuangg_umass_edu/yuncong/vlm_cache
 export HF_HUB_CACHE=/work/pi_chuangg_umass_edu/yuncong/vlm_cache
 
-python run_vlm_exp.py -cf cfg/eval_baseline_vlm.yaml
+#python run_vlm_exp.py -cf cfg/eval_baseline_vlm.yaml
+python run_vlm_exp_panoramic.py -cf cfg/eval_panoramic_vlm.yaml
