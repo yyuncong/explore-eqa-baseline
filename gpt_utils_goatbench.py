@@ -90,7 +90,7 @@ def encode_tensor2base64(img):
     return img_base64
 
 def format_confidence_question(question, ref_image, obs_image):
-    sys_prompt = "Task: You are an agent in an indoor scene tasked with answering questions by observing the surroundings and exploring the environment."
+    sys_prompt = "Task: You are an agent in an indoor scene tasked with finding a target object by observing the surroundings and exploring the environment."
     content = []
     
     text = "Here is the current view of the scene."
@@ -103,7 +103,7 @@ def format_confidence_question(question, ref_image, obs_image):
         text = f"\nConsider the question: '{question}'."
         ref_image = encode_tensor2base64(ref_image)
         content.append((text, ref_image))
-    text = "\nAre you confident about answering the question with the current view? Answer with Yes/No \n"
+    text = "\nAre you confident that you have arrived at the target object described in the question, and the target object is in the current view? Answer with Yes/No \n"
     content.append((text,))
     #text = "you should return a score between 0 and 10.\n"
     #text += "you can show the reason for your confidence score but put it in a new line after the choice.\n"
@@ -145,7 +145,7 @@ def get_confidence(question, ref_image, obs_image):
     return 0
 
 def format_choose_direction(question, ref_image, obs_image, candidates):
-    sys_prompt = "Task: You are an agent in an indoor scene tasked with answering questions by observing the surroundings and exploring the environment."
+    sys_prompt = "Task: You are an agent in an indoor scene tasked with finding a target object by observing the surroundings and exploring the environment."
     content = []
     
     text = "Here is the current view of the scene."
@@ -157,7 +157,7 @@ def format_choose_direction(question, ref_image, obs_image, candidates):
         content.append((text, ref_image))
     else:
         content.append((text,))
-    text = "\nYou will explore the environment for answering it. So which direction (black letters marked on the current view image) would you explore then?\n"
+    text = "\nYou will explore the environment for finding the target object described in the question. So which direction (black letters marked on the current view image) would you explore then?\n"
     text += f"Answer with following directions: {','.join(candidates)}\n"
     text += f"Please return with letter "
     for c in candidates[:-1]:
@@ -212,7 +212,7 @@ def get_directions(question, ref_image, obs_image, candidates):
     return np.ones(len(candidates)) / len(candidates)
 
 def format_global_selection(question, ref_image, obs_image):
-    sys_prompt = "Task: You are an agent in an indoor scene tasked with answering questions by observing the surroundings and exploring the environment."
+    sys_prompt = "Task: You are an agent in an indoor scene tasked with finding a target object by observing the surroundings and exploring the environment."
     content = []
     
     text = "Here is the current view of the scene."
@@ -226,7 +226,7 @@ def format_global_selection(question, ref_image, obs_image):
     else:
         content.append((text,))
 
-    text = "\nYou will explore the environment for answering it. Is there any direction shown in the image worth exploring?\n"
+    text = "\nYou will explore the environment for finding the target object described in the question. Is there any direction shown in the image worth exploring?\n"
     text += "Answer with \"Yes\" or \"No\"\n"
     content.append((text,))
     return sys_prompt, content

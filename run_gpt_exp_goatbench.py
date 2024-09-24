@@ -254,13 +254,13 @@ def main(cfg, start_ratio=0.0, end_ratio=1.0):
                 # Prepare metadata for the subtask
                 # format question according to the goal type
                 if goal_type == "object":
-                    question = f"Where is the {goal_category}?"
+                    question = f"Can you find the {goal_category}?"
                     ref_image = None
                 elif goal_type == "description":
-                    question = f"Could you find the object described as \'{subtask_goal[0]['lang_desc']}\'?"
+                    question = f"Could you find the object exactly described as \'{subtask_goal[0]['lang_desc']}\'?"
                     ref_image = None
                 else:  # goal_type == "image"
-                    view_pos_dict = random.choice(subtask_goal[0]["view_points"])['agent_state']
+                    view_pos_dict = subtask_goal[0]["view_points"][0]['agent_state']
 
                     agent_state.position = view_pos_dict["position"]
                     agent_state.rotation = view_pos_dict["rotation"]
@@ -269,7 +269,7 @@ def main(cfg, start_ratio=0.0, end_ratio=1.0):
 
                     plt.imsave(os.path.join(str(cfg.output_dir), f"{subtask_id}", "image_goal.png"), obs["color_sensor"])
 
-                    question = f"Could you find the object captured in the following image?"
+                    question = f"Could you find the place and object captured in the following image? You need to pay attention to the environment and find the exactly same scene."
                     ref_image = Image.fromarray(obs["color_sensor"], mode="RGBA").convert("RGB")
 
                 rotation = get_quaternion(angle, camera_tilt)
