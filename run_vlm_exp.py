@@ -38,7 +38,7 @@ from src.geom import get_cam_intr, get_scene_bnds
 from src.vlm import VLM
 from src.tsdf import TSDFPlanner
 from loader import *
-from keys import hf_token
+hf_token = os.environ["HF_TOKEN"]
 from huggingface_hub import login
 import json
 
@@ -383,11 +383,12 @@ def main(cfg):
                     logging.info("Early stop due to high confidence!")
                     logging.info("Current relevancy: {}".format(smx_vlm_rel[0]))
                     # also save the round observation
+                    '''
                     take_round_observation(
                         agent,simulator,
                         camera_tilt,pts,angle,
                         cfg.object_obs,episode_object_observe_dir)
-                    
+                    '''
                     extract_last_k_observations(
                         episode_observations_dir,episode_object_observe_dir,cnt_step,cfg.num_last_views
                     )
