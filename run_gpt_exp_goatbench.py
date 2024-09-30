@@ -22,7 +22,7 @@ import time
 import habitat_sim
 from habitat_sim.utils.common import quat_to_coeffs, quat_from_angle_axis, quat_to_angle_axis, quat_from_coeffs
 from src.habitat import (
-    make_simple_cfg,
+    make_semantic_cfg,
     pos_normal_to_habitat,
     pos_habitat_to_normal,
     pose_habitat_to_normal,
@@ -211,7 +211,7 @@ def main(cfg, start_ratio=0.0, end_ratio=1.0):
                     "hfov": cfg.hfov,
                     "scene_dataset_config_file": cfg.scene_dataset_config_path,
                 }
-                sim_cfg = make_simple_cfg(sim_settings)
+                sim_cfg = make_semantic_cfg(sim_settings)
                 simulator = habitat_sim.Simulator(sim_cfg)
                 pathfinder = simulator.pathfinder
                 pathfinder.seed(cfg.seed)
@@ -311,6 +311,7 @@ def main(cfg, start_ratio=0.0, end_ratio=1.0):
                     'position':None,
                     'rotation':None
                 }
+                target_in_obs = False
                 for cnt_step in range(num_step):
                     logging.info(f"\n== step: {cnt_step}")
 
@@ -337,10 +338,16 @@ def main(cfg, start_ratio=0.0, end_ratio=1.0):
                     obs = simulator.get_sensor_observations()
                     rgb = obs["color_sensor"]
                     depth = obs["depth_sensor"]
+                    semantic = obs["semantic_sensor"]
                     if cfg.save_obs:
                         plt.imsave(
                             os.path.join(episode_observations_dir, "{}.png".format(cnt_step)), rgb
                         )
+                    target_in_obs = False
+                    for target_id in goal_obj_ids:
+                        ratio = np.sum(semantic == target_id) / (img_height * img_width)
+                        if ratio > 0.001:
+                            target_in_obs = True
 
                     num_black_pixels = np.sum(
                         np.sum(rgb, axis=-1) == 0
@@ -509,9 +516,12 @@ def main(cfg, start_ratio=0.0, end_ratio=1.0):
                     else:
                         all_distances.append(path.geodesic_distance)
                 agent_subtask_distance = min(all_distances)
-                if agent_subtask_distance < cfg.success_distance:
+                if agent_subtask_distance < cfg.success_distance or target_in_obs:
                     success_by_distance[subtask_id] = 1.0
-                    logging.info(f"Success: agent reached the target viewpoint at distance {agent_subtask_distance}!")
+                    if agent_subtask_distance < cfg.success_distance:
+                        logging.info(f"Success: agent reached the target viewpoint at distance {agent_subtask_distance}!")
+                    if target_in_obs:
+                        logging.info(f"Success: target object found in the observation!")
                 else:
                     success_by_distance[subtask_id] = 0.0
                     logging.info(f"Fail: agent failed to reach the target viewpoint at distance {agent_subtask_distance}!")

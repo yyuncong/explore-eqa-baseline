@@ -19,7 +19,7 @@ use_best: false
 
 save_visualization: false
 
-confidence_threshold: 0.4
+confidence_threshold: 0.8
 # Question answering
 
 # Camera, image
