@@ -1,6 +1,6 @@
 # General
 seed: 42
-exp_name: vlm_baseline_prismatic_184_7b_room3_confidence0.4
+exp_name: vlm_baseline_gpt_184_7b_room1.5_confidence0.4_panoramic
 output_parent_dir: /work/pi_chuangg_umass_edu/yuncong/results/
 scene_dataset_config_path: "data/hm3d_annotated_basis.scene_dataset_config.json"
 scene_data_path_train: /project/pi_chuangg_umass_edu/yuncong/data_v2/scene_datasets/hm3d/train
@@ -27,13 +27,10 @@ early_stop: true
 use_best: false
 
 confidence_threshold: 0.4
-# Question answering
-vlm:
-  hf_token: 
-  device: cuda
-  model_id: prism-dinosiglip+7b
-  # revise the model storage path
-  cache_dir: /work/pi_chuangg_umass_edu/yuncong/vlm_cache
+
+# for prompting gpt-4o
+prompt_h: 360
+prompt_w: 360
 
 # Camera, image
 camera_height: 1.5
@@ -47,9 +44,13 @@ margin_h_ratio: 0.6
 
 # Navigation
 init_clearance: 0.5
-max_step_room_size_ratio: 3 #11 #3
-black_pixel_ratio: 0.2 #0.5
+max_step_room_size_ratio: 1.5  #11 #3
+black_pixel_ratio: 0.5
 min_random_init_steps: 2
+extra_view_phase_1: 2
+extra_view_angle_deg_phase_1: 60
+extra_view_phase_2: 6
+extra_view_angle_deg_phase_2: 40
 
 # Semantic map
 use_active: true

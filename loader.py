@@ -107,7 +107,58 @@ def store_observations(observe_dir, observations):
 # as the observation for the object
 def extract_last_k_observations(src_dir, dst_dir, idx, k = 5):
     files = os.listdir(src_dir)
+    # drop out other angle observations
+    files = [f for f in files if '_' not in f]
     files = sorted(files, key=lambda x: int(x.split('.')[0]))
     start = max(idx+1-k,0)
     for i in range(start,idx+1):
         shutil.copy2(os.path.join(src_dir,files[i]),os.path.join(dst_dir,f'{i-start}.png'))
+        
+        
+
+def resample_data(src_dir, dst_dir, last_k = 5):
+    files = os.listdir(src_dir)
+    success_cnt = 0
+    for f in files:
+        f_path = os.path.join(src_dir,f)
+        if not os.path.isdir(f_path):
+            shutil.copy2(f_path,os.path.join(dst_dir,f))
+        else:
+            question_dir = os.path.join(dst_dir,f)
+            os.makedirs(question_dir, exist_ok=True)
+            src_frontier_dir = os.path.join(f_path,'frontier')
+            os.makedirs(os.path.join(question_dir,'frontier'), exist_ok=True)
+            src_observation_dir = os.path.join(f_path,'observations')
+            os.makedirs(os.path.join(question_dir,'observations'), exist_ok=True)
+            src_target_observation_dir = os.path.join(f_path,"object_observations")
+            os.makedirs(os.path.join(question_dir,'object_observations'), exist_ok=True)
+            src_semantic_dir = os.path.join(f_path,'semantic')
+            os.makedirs(os.path.join(question_dir,'semantic'), exist_ok=True)
+            
+            # extract target observations from src observations
+            if len(os.listdir(src_target_observation_dir)) == 0:
+                # question fails, no target observation
+                continue
+            egocentric_observations = os.listdir(src_observation_dir)
+            egocentric_observations = sorted(
+                [f for f in os.listdir(src_observation_dir) if '_' not in f],
+                key=lambda x: int(x.split('.')[0])
+            )
+            if len(egocentric_observations) > 5:
+                egocentric_observations = egocentric_observations[-5:]
+            for i, ego_obs in enumerate(egocentric_observations):
+                shutil.copy2(os.path.join(src_observation_dir,ego_obs),os.path.join(question_dir,'object_observations',f"{i}.png"))
+            success_cnt += 1
+    print(f"Success rate: {success_cnt/184}")
+            
+        
+
+if __name__ == "__main__":
+    '''
+    resample_data(
+        '/work/pi_chuangg_umass_edu/yuncong/results/vlm_baseline_gpt_184_7b_room1.5_confidence0.4_panoramic',
+        '/work/pi_chuangg_umass_edu/yuncong/results/vlm_baseline_gpt_184_7b_room1.5_confidence0.4_panoramic_resample'
+    )
+    '''
+    
+    
