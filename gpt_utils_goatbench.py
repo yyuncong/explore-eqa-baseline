@@ -11,7 +11,7 @@ import numpy as np
 import tiktoken
 
 client = AzureOpenAI(
-    azure_endpoint="https://jiaben.openai.azure.com/",
+    azure_endpoint = "https://yuncong.openai.azure.com/",
     api_key=os.getenv('AZURE_OPENAI_KEY'),
     api_version="2024-02-15-preview",
 )
